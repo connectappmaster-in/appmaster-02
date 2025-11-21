@@ -104,11 +104,11 @@ const Payments = () => {
         <ProfileSidebar />
       
       <main className="flex-1 overflow-y-auto">
-        <div className="max-w-5xl mx-auto px-4 py-4 space-y-4">
+        <div className="max-w-5xl mx-auto px-4 py-3 space-y-3">
           {/* Header */}
           <div>
-            <h1 className="text-2xl font-semibold text-foreground">Payments & Billing</h1>
-            <p className="text-muted-foreground mt-1">
+            <h1 className="text-xl font-semibold text-foreground">Payments & Billing</h1>
+            <p className="text-xs text-muted-foreground mt-0.5">
               Manage your subscription, payment methods, and billing history
             </p>
           </div>
@@ -130,55 +130,55 @@ const Payments = () => {
 
           {/* Current Subscription */}
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Receipt className="h-5 w-5" />
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center gap-2 text-base">
+                <Receipt className="h-4 w-4" />
                 Current Subscription
               </CardTitle>
-              <CardDescription>Your active subscription plan and details</CardDescription>
+              <CardDescription className="text-xs">Your active subscription plan and details</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-3 pt-2">
               {isLoadingSubscription ? (
                 <div className="text-center py-8 text-muted-foreground">Loading subscription...</div>
               ) : subscription ? (
                 <>
                   <div className="flex items-start justify-between">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-3">
-                        <h3 className="text-2xl font-semibold">{subscription.plan_name}</h3>
-                        <Badge className={getStatusColor(subscription.status || "")}>
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-lg font-semibold">{subscription.plan_name}</h3>
+                        <Badge className={`${getStatusColor(subscription.status || "")} text-xs px-2 py-0`}>
                           {subscription.status || "Unknown"}
                         </Badge>
                       </div>
                       {subscription.amount && (
-                        <p className="text-3xl font-bold text-primary">
+                        <p className="text-xl font-bold text-primary">
                           ₹{subscription.amount}
-                          <span className="text-sm font-normal text-muted-foreground">
+                          <span className="text-xs font-normal text-muted-foreground">
                             /{subscription.period || "month"}
                           </span>
                         </p>
                       )}
                     </div>
-                    <Button variant="outline" onClick={() => setIsChangePlanDialogOpen(true)}>
+                    <Button variant="outline" size="sm" onClick={() => setIsChangePlanDialogOpen(true)}>
                       Change Plan
                     </Button>
                   </div>
 
                   <Separator />
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {subscription.next_billing_date && (
-                      <div className="space-y-1">
-                        <p className="text-sm text-muted-foreground">Next Billing Date</p>
-                        <p className="font-medium">
+                      <div className="space-y-0.5">
+                        <p className="text-xs text-muted-foreground">Next Billing Date</p>
+                        <p className="text-sm font-medium">
                           {format(new Date(subscription.next_billing_date), "MMM dd, yyyy")}
                         </p>
                       </div>
                     )}
                     {subscription.renewal_date && (
-                      <div className="space-y-1">
-                        <p className="text-sm text-muted-foreground">Renewal Date</p>
-                        <p className="font-medium">
+                      <div className="space-y-0.5">
+                        <p className="text-xs text-muted-foreground">Renewal Date</p>
+                        <p className="text-sm font-medium">
                           {format(new Date(subscription.renewal_date), "MMM dd, yyyy")}
                         </p>
                       </div>
@@ -212,14 +212,14 @@ const Payments = () => {
 
           {/* Payment Methods */}
           <Card>
-            <CardHeader>
+            <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="flex items-center gap-2">
-                    <CreditCard className="h-5 w-5" />
+                  <CardTitle className="flex items-center gap-2 text-base">
+                    <CreditCard className="h-4 w-4" />
                     Payment Methods
                   </CardTitle>
-                  <CardDescription>Manage your payment methods</CardDescription>
+                  <CardDescription className="text-xs">Manage your payment methods</CardDescription>
                 </div>
                 <Button 
                   variant="outline" 
@@ -231,34 +231,34 @@ const Payments = () => {
                 </Button>
               </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-2">
               {isLoadingPaymentMethods ? (
                 <div className="text-center py-8 text-muted-foreground">
                   Loading payment methods...
                 </div>
               ) : paymentMethods && paymentMethods.length > 0 ? (
-                <div className="space-y-3">
+                <div className="space-y-2">
                   {paymentMethods.map((method) => (
                     <div
                       key={method.id}
-                      className="border rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer"
+                      className="border rounded-lg p-3 hover:bg-muted/50 transition-colors cursor-pointer"
                     >
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                          <div className="h-10 w-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded flex items-center justify-center">
-                            <CreditCard className="h-5 w-5 text-white" />
+                        <div className="flex items-center gap-3">
+                          <div className="h-8 w-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded flex items-center justify-center">
+                            <CreditCard className="h-4 w-4 text-white" />
                           </div>
                           <div>
-                            <p className="font-medium">
+                            <p className="text-sm font-medium">
                               •••• •••• •••• {method.card_last4}
                             </p>
-                            <p className="text-sm text-muted-foreground">
+                            <p className="text-xs text-muted-foreground">
                               Expires {method.card_exp_month}/{method.card_exp_year}
                             </p>
                           </div>
                         </div>
                         {method.is_default && (
-                          <Badge variant="secondary">Default</Badge>
+                          <Badge variant="secondary" className="text-xs">Default</Badge>
                         )}
                       </div>
                     </div>
@@ -274,46 +274,46 @@ const Payments = () => {
 
           {/* Payment History */}
           <Card>
-            <CardHeader>
-              <CardTitle>Payment History</CardTitle>
-              <CardDescription>Your recent transactions and invoices</CardDescription>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base">Payment History</CardTitle>
+              <CardDescription className="text-xs">Your recent transactions and invoices</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-2">
               {isLoadingHistory ? (
                 <div className="text-center py-8 text-muted-foreground">Loading payment history...</div>
               ) : paymentHistory && paymentHistory.length > 0 ? (
-                <div className="space-y-3">
+                <div className="space-y-2">
                   {paymentHistory.map((payment) => (
                     <div
                       key={payment.id}
-                      className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+                      className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors"
                     >
-                      <div className="flex items-center gap-4">
-                        <div className={`h-10 w-10 rounded-full flex items-center justify-center ${
+                      <div className="flex items-center gap-3">
+                        <div className={`h-8 w-8 rounded-full flex items-center justify-center ${
                           payment.status === "paid" ? "bg-green-500/10" : "bg-yellow-500/10"
                         }`}>
                           {payment.status === "paid" ? (
-                            <CheckCircle2 className="h-5 w-5 text-green-600" />
+                            <CheckCircle2 className="h-4 w-4 text-green-600" />
                           ) : (
-                            <Clock className="h-5 w-5 text-yellow-600" />
+                            <Clock className="h-4 w-4 text-yellow-600" />
                           )}
                         </div>
                         <div>
-                          <p className="font-medium">
+                          <p className="text-sm font-medium">
                             {format(new Date(payment.bill_period_start), "MMM dd")} - {format(new Date(payment.bill_period_end), "MMM dd, yyyy")}
                           </p>
-                          <div className="flex items-center gap-2 mt-1">
-                            <Badge variant="outline" className={getStatusColor(payment.status || "")}>
+                          <div className="flex items-center gap-2 mt-0.5">
+                            <Badge variant="outline" className={`${getStatusColor(payment.status || "")} text-xs`}>
                               {payment.status || "Unknown"}
                             </Badge>
-                            <span className="text-sm text-muted-foreground">
+                            <span className="text-xs text-muted-foreground">
                               {payment.payment_provider || "Stripe"}
                             </span>
                           </div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-4">
-                        <span className="font-semibold text-lg">₹{payment.amount}</span>
+                      <div className="flex items-center gap-3">
+                        <span className="font-semibold text-base">₹{payment.amount}</span>
                         {payment.invoice_url && (
                           <Button variant="ghost" size="sm">
                             <Download className="h-4 w-4" />
