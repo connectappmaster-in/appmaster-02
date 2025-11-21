@@ -113,46 +113,72 @@ const OrgEditorDashboard = () => {
     }));
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <DashboardHeader />
       
-      <div className="container mx-auto px-4 py-4 space-y-4">
-        <div>
-          <h1 className="text-2xl font-bold">{organisation?.name}</h1>
-          <p className="text-sm text-muted-foreground">
-            {role === 'employee' ? 'Employee Dashboard - Your Daily Tools' : 'Editor Dashboard - Operational Tools'}
+      <div className="container mx-auto px-6 py-8 space-y-8">
+        {/* Header Section */}
+        <div className="space-y-2">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+            {organisation?.name}
+          </h1>
+          <p className="text-muted-foreground">
+            {role === 'employee' ? '👋 Welcome back! Here are your daily tools' : '📊 Operational Dashboard'}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Stats Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <StatsCard
             title="Total Leads"
             value={stats?.leads || 0}
-            icon={Users}
-            color="from-blue-500 to-blue-600"
+            icon={TrendingUp}
+            color="from-blue-500 to-cyan-500"
             onClick={() => window.location.href = '/crm/leads'}
           />
           <StatsCard
             title="Total Contacts"
             value={stats?.contacts || 0}
             icon={Users}
-            color="from-orange-500 to-orange-600"
+            color="from-orange-500 to-pink-500"
             onClick={() => window.location.href = '/crm/customers'}
           />
         </div>
 
-        <div>
-          <h2 className="text-2xl font-semibold mb-4">
-            {role === 'employee' ? 'Available Tools' : 'Your Tools'}
-          </h2>
+        {/* Tools Section */}
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-2xl font-bold">
+                {role === 'employee' ? 'Your Tools' : 'Available Tools'}
+              </h2>
+              <p className="text-sm text-muted-foreground mt-1">
+                {availableTools.length > 0 
+                  ? `${availableTools.length} tool${availableTools.length !== 1 ? 's' : ''} available`
+                  : 'No tools assigned yet'}
+              </p>
+            </div>
+          </div>
+
           {isLoadingTools ? (
-            <div className="text-center py-8 text-muted-foreground">Loading tools...</div>
+            <div className="flex items-center justify-center py-16">
+              <div className="flex flex-col items-center gap-4">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+                <p className="text-muted-foreground">Loading your tools...</p>
+              </div>
+            </div>
           ) : availableTools.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              No tools assigned yet. Contact your admin to get access to tools.
+            <div className="flex flex-col items-center justify-center py-16 px-4">
+              <div className="w-24 h-24 rounded-full bg-muted/50 flex items-center justify-center mb-6">
+                <Package className="w-12 h-12 text-muted-foreground" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">No Tools Assigned</h3>
+              <p className="text-muted-foreground text-center max-w-md">
+                Contact your organization admin to get access to tools and start working.
+              </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {availableTools.map((tool) => (
                 <ToolCard
                   key={tool.key}
