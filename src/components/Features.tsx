@@ -9,12 +9,6 @@ const Features = () => {
     color: "from-blue-500 to-blue-600",
     path: "/apps/crm"
   }, {
-    icon: Package,
-    title: "Inventory Management",
-    description: "Monitor stock levels across warehouses with real-time inventory tracking and alerts",
-    color: "from-orange-500 to-orange-600",
-    path: "/apps/inventory"
-  }, {
     icon: FileText,
     title: "Invoicing & Billing",
     description: "Generate professional invoices and manage your billing cycles effortlessly",
@@ -39,17 +33,11 @@ const Features = () => {
     color: "from-green-500 to-green-600",
     path: "/apps/assets"
   }, {
-    icon: ShoppingCart,
-    title: "Shop Management",
-    description: "Track income and expenses for your shop operations in real-time",
-    color: "from-indigo-500 to-indigo-600",
-    path: "/apps/shop-income-expense"
-  }, {
-    icon: Calendar,
-    title: "Recruitment",
-    description: "Manage job postings, applications, and streamline your hiring process",
-    color: "from-red-500 to-red-600",
-    path: "/apps/recruitment"
+    icon: Package,
+    title: "Subscriptions",
+    description: "Manage subscriptions, track renewals, and control access to tools",
+    color: "from-rose-500 to-rose-600",
+    path: "/apps/subscriptions"
   }];
   return <section className="py-24 px-4 bg-background relative overflow-hidden">
       {/* Background Elements */}
