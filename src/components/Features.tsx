@@ -44,6 +44,12 @@ const Features = () => {
     description: "Track income and expenses for your shop operations in real-time",
     color: "from-indigo-500 to-indigo-600",
     path: "/apps/shop-income-expense"
+  }, {
+    icon: Calendar,
+    title: "Recruitment",
+    description: "Manage job postings, applications, and streamline your hiring process",
+    color: "from-red-500 to-red-600",
+    path: "/apps/recruitment"
   }];
   return <section className="py-24 px-4 bg-background relative overflow-hidden">
       {/* Background Elements */}
