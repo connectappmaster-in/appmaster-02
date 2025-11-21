@@ -21,7 +21,7 @@ export const ProfileSidebar = () => {
   });
 
   return (
-    <aside className="bg-card min-h-screen border-r" style={{ width: "200px", minWidth: "200px", maxWidth: "200px" }}>
+    <aside className="bg-card min-h-screen" style={{ width: "200px", minWidth: "200px", maxWidth: "200px" }}>
       <nav className="space-y-1 px-3 py-4">
         {visibleItems.map((item) => (
           <NavLink
