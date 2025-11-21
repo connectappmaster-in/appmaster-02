@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { AddIndividualUserDialog } from "./AddIndividualUserDialog";
+import { UserDetailsModal } from "./UserDetailsModal";
 
 export const IndividualUsersTable = () => {
   const [users, setUsers] = useState<any[]>([]);
@@ -25,12 +26,18 @@ export const IndividualUsersTable = () => {
   const orgFilter = searchParams.get("org");
   const navigate = useNavigate();
   
+  // User details modal state
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [userDetailsModalOpen, setUserDetailsModalOpen] = useState(false);
+  
   // Dialog states
   const [updateNameDialog, setUpdateNameDialog] = useState<{open: boolean, user: any | null}>({open: false, user: null});
   const [updateStatusDialog, setUpdateStatusDialog] = useState<{open: boolean, user: any | null}>({open: false, user: null});
+  const [updateEmailDialog, setUpdateEmailDialog] = useState<{open: boolean, user: any | null}>({open: false, user: null});
   const [deleteDialog, setDeleteDialog] = useState<{open: boolean, user: any | null}>({open: false, user: null});
   const [newName, setNewName] = useState("");
   const [newStatus, setNewStatus] = useState("");
+  const [newEmail, setNewEmail] = useState("");
 
   useEffect(() => {
     fetchUsers();
@@ -180,6 +187,41 @@ export const IndividualUsersTable = () => {
     }
   };
 
+  const handleUpdateEmail = async () => {
+    if (!updateEmailDialog.user || !newEmail.trim()) return;
+    
+    try {
+      const { error } = await supabase
+        .from("users")
+        .update({ email: newEmail.trim() })
+        .eq("id", updateEmailDialog.user.id);
+      
+      if (error) throw error;
+      toast.success("User email updated successfully");
+      setUpdateEmailDialog({open: false, user: null});
+      setNewEmail("");
+      fetchUsers();
+    } catch (error: any) {
+      toast.error("Failed to update email: " + error.message);
+    }
+  };
+
+  const handleSuspendUser = async (user: any) => {
+    try {
+      const newStatus = user.status === "suspended" ? "active" : "suspended";
+      const { error } = await supabase
+        .from("users")
+        .update({ status: newStatus })
+        .eq("id", user.id);
+      
+      if (error) throw error;
+      toast.success(`User ${newStatus === "suspended" ? "suspended" : "activated"} successfully`);
+      fetchUsers();
+    } catch (error: any) {
+      toast.error("Failed to update user status: " + error.message);
+    }
+  };
+
   const handleResetPassword = async (user: any) => {
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
@@ -239,10 +281,23 @@ export const IndividualUsersTable = () => {
     (user.name && user.name.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
+  const handleUserClick = (userId: string) => {
+    setSelectedUserId(userId);
+    setUserDetailsModalOpen(true);
+  };
+
   return (
-    <div className="space-y-4">
+    <>
+      <UserDetailsModal 
+        userId={selectedUserId}
+        open={userDetailsModalOpen}
+        onOpenChange={setUserDetailsModalOpen}
+        onRefresh={fetchUsers}
+      />
+      
+      <div className="space-y-4">
       <div className="flex items-center gap-4">
-        <div className="relative flex-1">
+        <div className="relative w-[30%]">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
           <Input
             placeholder="Search individual users..."
@@ -337,7 +392,14 @@ export const IndividualUsersTable = () => {
                       onCheckedChange={() => toggleSelectUser(user.id)}
                     />
                   </TableCell>
-                  <TableCell className="font-medium">{user.name || "-"}</TableCell>
+                  <TableCell className="font-medium">
+                    <button 
+                      onClick={() => handleUserClick(user.id)}
+                      className="text-primary hover:underline hover:text-primary/80 transition-colors"
+                    >
+                      {user.name || "-"}
+                    </button>
+                  </TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>
                     <span className="text-sm">{user.organisation_name}</span>
@@ -358,10 +420,7 @@ export const IndividualUsersTable = () => {
                           <MoreHorizontal className="w-4 h-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-48">
-                        <DropdownMenuItem onClick={() => navigate(`/super-admin/users/${user.id}`)}>
-                          View Profile
-                        </DropdownMenuItem>
+                      <DropdownMenuContent align="end" className="w-56">
                         <DropdownMenuItem onClick={() => {
                           setUpdateNameDialog({open: true, user});
                           setNewName(user.name || "");
@@ -369,16 +428,22 @@ export const IndividualUsersTable = () => {
                           Update Name
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => {
+                          setUpdateEmailDialog({open: true, user});
+                          setNewEmail(user.email || "");
+                        }}>
+                          Update Email
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => {
                           setUpdateStatusDialog({open: true, user});
                           setNewStatus(user.status);
                         }}>
                           Update Status
                         </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleSuspendUser(user)}>
+                          {user.status === "suspended" ? "Activate User" : "Suspend User"}
+                        </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleResetPassword(user)}>
                           Reset Password
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => navigate(`/super-admin/users/${user.id}/activity`)}>
-                          View Login Activity
                         </DropdownMenuItem>
                         <DropdownMenuItem 
                           className="text-destructive"
@@ -421,6 +486,36 @@ export const IndividualUsersTable = () => {
               Cancel
             </Button>
             <Button onClick={handleUpdateName}>Update</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Update Email Dialog */}
+      <Dialog open={updateEmailDialog.open} onOpenChange={(open) => !open && setUpdateEmailDialog({open: false, user: null})}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Update User Email</DialogTitle>
+            <DialogDescription>
+              Update the email for {updateEmailDialog.user?.name || updateEmailDialog.user?.email}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email Address</Label>
+              <Input
+                id="email"
+                type="email"
+                value={newEmail}
+                onChange={(e) => setNewEmail(e.target.value)}
+                placeholder="Enter new email"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setUpdateEmailDialog({open: false, user: null})}>
+              Cancel
+            </Button>
+            <Button onClick={handleUpdateEmail}>Update</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -476,5 +571,6 @@ export const IndividualUsersTable = () => {
         </DialogContent>
       </Dialog>
     </div>
+    </>
   );
 };

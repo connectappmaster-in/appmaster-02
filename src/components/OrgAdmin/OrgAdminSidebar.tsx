@@ -54,11 +54,11 @@ export function OrgAdminSidebar() {
 
   return (
     <div
-      className="h-screen flex flex-col border-r border-border bg-background transition-all duration-300 ease-in-out"
+      className="h-screen flex flex-col bg-background transition-all duration-300 ease-in-out"
       style={{
-        width: collapsed ? "56px" : "200px",
-        minWidth: collapsed ? "56px" : "200px",
-        maxWidth: collapsed ? "56px" : "200px",
+        width: collapsed ? "50px" : "180px",
+        minWidth: collapsed ? "50px" : "180px",
+        maxWidth: collapsed ? "50px" : "180px",
       }}
     >
       {/* Header - matches navbar height */}

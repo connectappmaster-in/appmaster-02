@@ -176,7 +176,7 @@ const Notifications = () => {
     <div className="min-h-screen bg-background">
       <div className="container max-w-4xl mx-auto py-8 px-4">
         <div className="flex items-center gap-4 mb-6">
-          <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
+          <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="opacity-0 hover:opacity-100 transition-opacity duration-200">
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div className="flex-1">

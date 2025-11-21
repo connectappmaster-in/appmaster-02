@@ -129,10 +129,7 @@ const SuperAdminDashboard = () => {
       
 
       {/* System Activity */}
-      <Card>
-        
-        
-      </Card>
+      
     </div>;
 };
 export default SuperAdminDashboard;

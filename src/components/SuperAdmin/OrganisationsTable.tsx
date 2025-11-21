@@ -7,6 +7,7 @@ import { MoreHorizontal, Search, Plus, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
+import { OrganizationDetailsModal } from "./OrganizationDetailsModal";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -53,6 +54,8 @@ export const OrganisationsTable = () => {
     plan_id: "",
     account_type: "organization"
   });
+  const [selectedOrgId, setSelectedOrgId] = useState<string | null>(null);
+  const [orgDetailsModalOpen, setOrgDetailsModalOpen] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -264,6 +267,11 @@ export const OrganisationsTable = () => {
     navigate(`/super-admin/organization-users?orgId=${org.id}`);
   };
 
+  const handleOrgClick = (orgId: string) => {
+    setSelectedOrgId(orgId);
+    setOrgDetailsModalOpen(true);
+  };
+
   const handleCreateOrganisation = async () => {
     try {
       if (!newOrgData.name.trim()) {
@@ -391,7 +399,14 @@ export const OrganisationsTable = () => {
             ) : (
               filteredOrgs.map((org) => (
                 <TableRow key={org.id}>
-                  <TableCell className="font-medium">{org.name}</TableCell>
+                  <TableCell className="font-medium">
+                    <button
+                      onClick={() => handleOrgClick(org.id)}
+                      className="text-primary hover:underline cursor-pointer text-left"
+                    >
+                      {org.name}
+                    </button>
+                  </TableCell>
                   <TableCell>
                     <span className="text-sm text-muted-foreground">
                       {org.domain || "—"}
@@ -662,6 +677,14 @@ export const OrganisationsTable = () => {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Organization Details Modal */}
+      <OrganizationDetailsModal
+        organizationId={selectedOrgId}
+        open={orgDetailsModalOpen}
+        onOpenChange={setOrgDetailsModalOpen}
+        onRefresh={fetchOrganisations}
+      />
     </div>
   );
 };

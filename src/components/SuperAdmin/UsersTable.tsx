@@ -7,6 +7,7 @@ import { MoreHorizontal, Search, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useSearchParams } from "react-router-dom";
+import { UserDetailsModal } from "./UserDetailsModal";
 
 export const UsersTable = () => {
   const [users, setUsers] = useState<any[]>([]);
@@ -16,6 +17,8 @@ export const UsersTable = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const orgFilter = searchParams.get("org");
   const [filterOrgName, setFilterOrgName] = useState<string>("");
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     fetchUsers();
@@ -83,7 +86,19 @@ export const UsersTable = () => {
     user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleUserClick = (userId: string) => {
+    setSelectedUserId(userId);
+    setModalOpen(true);
+  };
+
   return (
+    <>
+      <UserDetailsModal 
+        userId={selectedUserId}
+        open={modalOpen}
+        onOpenChange={setModalOpen}
+        onRefresh={fetchUsers}
+      />
     <div className="space-y-4">
       <div className="flex items-center gap-4">
         <div className="relative flex-1">
@@ -152,7 +167,14 @@ export const UsersTable = () => {
             ) : (
               filteredUsers.map((user) => (
                 <TableRow key={user.id}>
-                  <TableCell className="font-medium">{user.name || "-"}</TableCell>
+                  <TableCell className="font-medium">
+                    <button 
+                      onClick={() => handleUserClick(user.id)}
+                      className="text-primary hover:underline hover:text-primary/80 transition-colors"
+                    >
+                      {user.name || "-"}
+                    </button>
+                  </TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>
                     <Badge 
@@ -191,7 +213,9 @@ export const UsersTable = () => {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem>View Details</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleUserClick(user.id)}>
+                          View Details
+                        </DropdownMenuItem>
                         <DropdownMenuItem>Edit Role</DropdownMenuItem>
                         <DropdownMenuItem>Impersonate</DropdownMenuItem>
                         <DropdownMenuItem className="text-destructive">Suspend</DropdownMenuItem>
@@ -205,5 +229,6 @@ export const UsersTable = () => {
         </Table>
       </div>
     </div>
+    </>
   );
 };

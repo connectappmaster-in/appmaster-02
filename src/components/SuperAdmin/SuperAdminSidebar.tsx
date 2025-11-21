@@ -123,10 +123,10 @@ export function SuperAdminSidebar() {
       });
     }
   };
-  return <div className="h-screen flex flex-col border-r border-border bg-background transition-all duration-300 ease-in-out" style={{
-    width: collapsed ? "56px" : "200px",
-    minWidth: collapsed ? "56px" : "200px",
-    maxWidth: collapsed ? "56px" : "200px"
+  return <div className="h-screen flex flex-col bg-background transition-all duration-300 ease-in-out" style={{
+    width: collapsed ? "50px" : "180px",
+    minWidth: collapsed ? "50px" : "180px",
+    maxWidth: collapsed ? "50px" : "180px"
   }}>
       {/* Header - matches navbar height */}
       <div className="flex items-center justify-center border-b border-border px-2" style={{
@@ -220,64 +220,6 @@ export function SuperAdminSidebar() {
         })()}
         </div>
 
-        {/* Logout */}
-        <div>
-          {(() => {
-          const logoutButton = <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Are you sure you want to logout?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      You will be redirected to the login page and will need to sign in again.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleLogout}>Logout</AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>;
-          if (collapsed) {
-            return <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <button className="flex items-center h-10 w-full rounded-lg transition-colors font-medium text-foreground/70 hover:text-primary hover:bg-accent/50">
-                            <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
-                              <LogOut className="w-5 h-5" />
-                            </div>
-                          </button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>
-                              Are you sure you want to logout?
-                            </AlertDialogTitle>
-                            <AlertDialogDescription>
-                              You will be redirected to the login page and will need to sign in
-                              again.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction onClick={handleLogout}>Logout</AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    </TooltipTrigger>
-                    <TooltipContent side="right" className="ml-2">
-                      <p>Logout</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>;
-          }
-          return logoutButton;
-        })()}
-        </div>
       </div>
     </div>;
 }

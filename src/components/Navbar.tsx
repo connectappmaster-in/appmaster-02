@@ -27,7 +27,12 @@ const Navbar = () => {
   }, []);
   return <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "bg-background/95 backdrop-blur-lg" : "bg-transparent"}`}>
       <div className="w-full px-4 sm:px-6 lg:px-8 py-1.5 items-center justify-between flex flex-row">
-        <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          onClick={() => navigate(-1)}
+          className={isLandingPage ? "invisible" : "opacity-0 hover:opacity-100 transition-opacity duration-200"}
+        >
           <ArrowLeft className="h-5 w-5" />
         </Button>
         <nav className="flex items-center gap-2">
