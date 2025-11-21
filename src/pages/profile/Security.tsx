@@ -39,7 +39,7 @@ const Security = () => {
       <Navbar />
       <div className="flex pt-14 h-full overflow-hidden">
         <ProfileSidebar />
-      <main className="flex-1 overflow-hidden">
+      <main className="flex-1 overflow-y-auto">
         <div className="max-w-4xl mx-auto px-6 py-8 space-y-6">
           <div>
             <h1 className="text-3xl font-normal">Security</h1>

@@ -240,7 +240,7 @@ const Profile = () => {
         <ProfileSidebar />
 
       {/* Main Content */}
-      <main className="flex-1 overflow-hidden">
+      <main className="flex-1 overflow-y-auto">
         <div className="max-w-5xl mx-auto px-6 py-8 space-y-8">
           {/* Header Section */}
           <div className="text-center space-y-4">
