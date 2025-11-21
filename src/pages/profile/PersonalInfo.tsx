@@ -161,7 +161,7 @@ const PersonalInfo = () => {
                       className="h-9"
                     />
                   ) : (
-                    <p className="text-sm py-1.5 px-3 bg-muted rounded-md">
+                    <p className="text-sm py-1.5 px-3 bg-muted/20 rounded-md">
                       {formData.name || "-"}
                     </p>
                   )}
@@ -169,7 +169,7 @@ const PersonalInfo = () => {
 
                 <div className="space-y-1.5">
                   <Label className="text-sm">Email</Label>
-                  <p className="text-sm py-1.5 px-3 bg-muted/50 rounded-md">
+                  <p className="text-sm py-1.5 px-3 bg-muted/20 rounded-md">
                     {userData?.email || user?.email}
                   </p>
                 </div>
@@ -184,7 +184,7 @@ const PersonalInfo = () => {
                       className="h-9"
                     />
                   ) : (
-                    <p className="text-sm py-1.5 px-3 bg-muted rounded-md">
+                    <p className="text-sm py-1.5 px-3 bg-muted/20 rounded-md">
                       {formData.phone || "-"}
                     </p>
                   )}
