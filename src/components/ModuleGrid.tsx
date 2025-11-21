@@ -36,7 +36,7 @@ const modules = [
     category: "IT", 
     color: "from-cyan-500 to-blue-500",
     items: [
-      { name: "Tickets Handling", icon: Ticket, path: "/tickets" },
+      { name: "IT Help Desk", icon: Ticket, path: "/it-help-desk" },
       { name: "Subscriptions", icon: CreditCard, path: "/subscriptions" },
       { name: "Assets", icon: Package, path: "/assets" }
     ]

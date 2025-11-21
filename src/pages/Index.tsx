@@ -99,7 +99,7 @@ const Index = () => {
     { key: "crm", name: "CRM", icon: BarChart3, path: "/crm", color: "from-indigo-500 to-purple-500" },
     { key: "invoicing", name: "Invoicing", icon: FileText, path: "/invoicing", color: "from-blue-500 to-cyan-500" },
     { key: "attendance", name: "Attendance", icon: Users, path: "/attendance", color: "from-purple-500 to-pink-500" },
-    { key: "tickets", name: "Tickets", icon: Ticket, path: "/tickets", color: "from-cyan-500 to-blue-500" },
+    { key: "it_help_desk", name: "IT Help Desk", icon: Ticket, path: "/it-help-desk", color: "from-cyan-500 to-blue-500" },
     { key: "assets", name: "Assets", icon: Package, path: "/assets", color: "from-emerald-500 to-teal-500" },
     { key: "subscriptions", name: "Subscriptions", icon: PackageSearch, path: "/subscriptions", color: "from-orange-500 to-red-500" },
   ];
@@ -127,7 +127,7 @@ const Index = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
           <StatsCard title="Active Users" value={stats?.users || 0} icon={Users} color="from-blue-500 to-cyan-500" />
           <StatsCard title="CRM Leads" value={stats?.leads || 0} icon={TrendingUp} color="from-purple-500 to-pink-500" />
-          <StatsCard title="Open Tickets" value={stats?.tickets || 0} icon={Ticket} color="from-orange-500 to-red-500" />
+          <StatsCard title="Open Support Tickets" value={stats?.tickets || 0} icon={Ticket} color="from-orange-500 to-red-500" />
         </div>
 
         <div className="mb-4">

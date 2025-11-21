@@ -26,7 +26,7 @@ const TOOL_ICONS: Record<string, LucideIcon> = {
   attendance: Calendar,
   crm: Users,
   invoicing: FileText,
-  tickets: Ticket,
+  it_help_desk: Ticket,
   subscriptions: TrendingUp,
   inventory: Package,
   marketing: TrendingUp,
