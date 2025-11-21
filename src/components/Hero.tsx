@@ -77,11 +77,6 @@ const Hero = () => {
                     <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
-                <Link to="/contact">
-                  <Button size="lg" variant="outline" className="h-12 px-8 hover:bg-muted transition-all duration-300">
-                    Schedule Demo
-                  </Button>
-                </Link>
               </div>
             </div>
           </div>
