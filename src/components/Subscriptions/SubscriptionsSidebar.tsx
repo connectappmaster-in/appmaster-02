@@ -109,7 +109,7 @@ export const SubscriptionsSidebar = () => {
       </div>
 
       {/* Bottom Section */}
-      <div className="border-t border-border p-2 space-y-1">
+      <div className="p-2 space-y-1">
         {/* Homepage Button */}
         <div>
           {(() => {
