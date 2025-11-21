@@ -2,13 +2,12 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useOrganisation } from "@/contexts/OrganisationContext";
 import { Navigate } from "react-router-dom";
 import { DashboardHeader } from "@/components/Dashboard/DashboardHeader";
-import { StatsCard } from "@/components/Dashboard/StatsCard";
 import { ToolCard } from "@/components/Dashboard/ToolCard";
 import { 
-  Users, Package, TrendingUp, 
+  Users, Package,
   Calendar, FileText, Briefcase,
   Ticket,
-  Megaphone
+  PackageSearch
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -58,23 +57,6 @@ const OrgEditorDashboard = () => {
     enabled: !!user && !!organisation?.id,
   });
 
-  const { data: stats } = useQuery({
-    queryKey: ["org-editor-stats", organisation?.id],
-    queryFn: async () => {
-      if (!organisation?.id) return { leads: 0, contacts: 0 };
-      
-      const [leadsCount, contactsCount] = await Promise.all([
-        supabase.from("crm_leads").select("*", { count: "exact", head: true }).eq("organisation_id", organisation.id),
-        supabase.from("crm_contacts").select("*", { count: "exact", head: true }).eq("organisation_id", organisation.id),
-      ]);
-
-      return {
-        leads: leadsCount.count || 0,
-        contacts: contactsCount.count || 0,
-      };
-    },
-    enabled: !!user && !!organisation?.id,
-  });
 
   if (loading) {
     return (
@@ -97,7 +79,7 @@ const OrgEditorDashboard = () => {
     invoicing: { icon: FileText, path: "/invoicing", color: "text-yellow-500" },
     assets: { icon: Briefcase, path: "/assets", color: "text-indigo-500" },
     attendance: { icon: Calendar, path: "/attendance", color: "text-purple-500" },
-    subscriptions: { icon: TrendingUp, path: "/subscriptions", color: "text-pink-500" },
+    subscriptions: { icon: PackageSearch, path: "/subscriptions", color: "text-pink-500" },
     it_help_desk: { icon: Ticket, path: "/it-help-desk", color: "text-red-500" },
   };
   
@@ -125,28 +107,6 @@ const OrgEditorDashboard = () => {
           <p className="text-base text-muted-foreground animate-fade-in" style={{ animationDelay: '0.1s' }}>
             {role === 'employee' ? '👋 Welcome back! Here are your daily tools' : '📊 Operational Dashboard'}
           </p>
-        </div>
-
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            <StatsCard
-              title="Total Leads"
-              value={stats?.leads || 0}
-              icon={TrendingUp}
-              color="from-blue-500 via-cyan-500 to-blue-600"
-              onClick={() => window.location.href = '/crm/leads'}
-            />
-          </div>
-          <div className="animate-fade-in" style={{ animationDelay: '0.3s' }}>
-            <StatsCard
-              title="Total Contacts"
-              value={stats?.contacts || 0}
-              icon={Users}
-              color="from-orange-500 via-pink-500 to-orange-600"
-              onClick={() => window.location.href = '/crm/customers'}
-            />
-          </div>
         </div>
 
         {/* Tools Section */}
