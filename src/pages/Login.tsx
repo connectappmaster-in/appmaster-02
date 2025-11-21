@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import loginBackground from "@/assets/login-background.jpg";
 
 const Login = () => {
   const [isSignup, setIsSignup] = useState(false);
@@ -115,17 +116,25 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-purple-700 to-pink-600 p-4 relative overflow-hidden">
-      {/* Decorative background elements */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-600/20 via-transparent to-transparent"></div>
+    <div 
+      className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden"
+      style={{
+        backgroundImage: `url(${loginBackground})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      {/* Overlay for better contrast */}
+      <div className="absolute inset-0 bg-black/10"></div>
       
       {!isSignup ? (
         /* Login Form */
-        <div className="w-full max-w-md relative">
-          <div className="backdrop-blur-xl bg-white/10 rounded-3xl border border-white/20 shadow-2xl p-10 animate-fade-in">
-            <h1 className="text-4xl font-bold text-white text-center mb-8">Login</h1>
+        <div className="w-full max-w-md relative z-10">
+          <div className="backdrop-blur-xl bg-white/10 rounded-2xl border border-white/20 shadow-2xl p-8 animate-fade-in">
+            <h1 className="text-3xl font-bold text-white text-center mb-6">Login</h1>
             
-            <form onSubmit={handleLogin} className="space-y-6">
+            <form onSubmit={handleLogin} className="space-y-5">
               <div>
                 <label htmlFor="login-email" className="block text-white text-sm mb-2">Email</label>
                 <input
@@ -185,10 +194,10 @@ const Login = () => {
         </div>
       ) : (
         /* Sign Up Form */
-        <div className="w-full max-w-md relative">
-          <div className="backdrop-blur-xl bg-white/10 rounded-3xl border border-white/20 shadow-2xl p-10 animate-fade-in">
-            <div className="flex items-center justify-between mb-6">
-              <h1 className="text-3xl font-bold text-white">Create Account</h1>
+        <div className="w-full max-w-md relative z-10">
+          <div className="backdrop-blur-xl bg-white/10 rounded-2xl border border-white/20 shadow-2xl p-8 animate-fade-in">
+            <div className="flex items-center justify-between mb-5">
+              <h1 className="text-2xl font-bold text-white">Create Account</h1>
               <button
                 type="button"
                 onClick={() => setIsSignup(false)}
@@ -198,7 +207,7 @@ const Login = () => {
               </button>
             </div>
 
-            <form onSubmit={handleSignup} className="space-y-5">
+            <form onSubmit={handleSignup} className="space-y-4">
               {/* Account Type Toggle */}
               <div>
                 <Label className="text-white text-sm mb-2 block">Account Type</Label>
@@ -288,7 +297,7 @@ const Login = () => {
 
               <Button 
                 type="submit" 
-                className="w-full bg-white text-purple-900 hover:bg-white/90 rounded-full py-6 font-semibold text-base shadow-lg transition-all duration-200 mt-6" 
+                className="w-full bg-white text-purple-900 hover:bg-white/90 rounded-full py-6 font-semibold text-base shadow-lg transition-all duration-200 mt-4" 
                 disabled={loading}
               >
                 {loading ? "Creating account..." : "Create Account"}
