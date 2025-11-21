@@ -19,19 +19,17 @@ const OrgViewerDashboard = () => {
   const { data: stats } = useQuery({
     queryKey: ["org-viewer-stats", organisation?.id],
     queryFn: async () => {
-      if (!organisation?.id) return { leads: 0, tickets: 0, inventory: 0, users: 0 };
+      if (!organisation?.id) return { leads: 0, tickets: 0, users: 0 };
       
-      const [leadsCount, ticketsCount, inventoryCount, usersCount] = await Promise.all([
+      const [leadsCount, ticketsCount, usersCount] = await Promise.all([
         supabase.from("crm_leads").select("*", { count: "exact", head: true }).eq("organisation_id", organisation.id),
         supabase.from("crm_contacts").select("*", { count: "exact", head: true }).eq("organisation_id", organisation.id),
-        supabase.from("inventory_items").select("*", { count: "exact", head: true }).eq("organisation_id", organisation.id),
         supabase.from("users").select("*", { count: "exact", head: true }).eq("organisation_id", organisation.id).eq("status", "active"),
       ]);
 
       return {
         leads: leadsCount.count || 0,
         tickets: ticketsCount.count || 0,
-        inventory: inventoryCount.count || 0,
         users: usersCount.count || 0,
       };
     },
@@ -86,12 +84,6 @@ const OrgViewerDashboard = () => {
             value={stats?.tickets || 0}
             icon={Ticket}
             color="from-orange-500 to-orange-600"
-          />
-          <StatsCard
-            title="Inventory Items"
-            value={stats?.inventory || 0}
-            icon={Package}
-            color="from-purple-500 to-purple-600"
           />
         </div>
 
