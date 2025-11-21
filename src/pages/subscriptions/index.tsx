@@ -9,7 +9,7 @@ const Subscriptions = () => {
       <SubscriptionsSidebar />
       
       <main className="flex-1 min-h-screen flex flex-col bg-background">
-        <div className="border-b px-4 py-2">
+        <div className="border-b border-border px-4 flex items-center" style={{ height: "52px" }}>
           <h1 className="text-lg font-semibold">IT Tools & Subscriptions</h1>
         </div>
 
