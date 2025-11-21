@@ -25,15 +25,15 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-  return <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "bg-background/95 backdrop-blur-lg shadow-md border-b border-border" : "bg-transparent"}`}>
+  return <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-[var(--transition-base)] ${isScrolled ? "bg-background/95 backdrop-blur-lg shadow-sm border-b" : "bg-transparent"}`}>
       <div className="w-full px-4 sm:px-6 lg:px-8 py-3 items-center justify-between flex flex-row">
         <Button 
           variant="ghost" 
           size="icon" 
           onClick={() => navigate(-1)}
-          className={isLandingPage ? "invisible" : "opacity-0 hover:opacity-100 transition-all duration-300"}
+          className={isLandingPage ? "invisible" : "opacity-0 hover:opacity-100 transition-opacity duration-[var(--transition-base)]"}
         >
-          <ArrowLeft className="h-4 w-4" strokeWidth={2} />
+          <ArrowLeft className="h-4 w-4" />
         </Button>
         <nav className="flex items-center gap-1">
           {user ? <>
@@ -68,10 +68,10 @@ const Navbar = () => {
               </DropdownMenu>
             </> : <>
               <Link to="/login">
-                <Button variant="ghost" size="sm" className="hover:bg-muted transition-all">Login</Button>
+                <Button variant="ghost" size="sm">Login</Button>
               </Link>
               <Link to="/login">
-                <Button size="sm" className="shadow-sm hover:shadow-md transition-all">Get Started</Button>
+                <Button size="sm">Get Started</Button>
               </Link>
             </>}
         </nav>

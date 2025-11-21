@@ -45,7 +45,7 @@ const Benefits = () => {
   ];
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-b from-muted/30 to-background relative overflow-hidden">
+    <section className="py-12 px-4 bg-gradient-to-b from-muted/30 to-background relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-1/3 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "0.5s" }} />
@@ -53,26 +53,25 @@ const Benefits = () => {
       </div>
 
       <div className="container mx-auto relative z-10">
-        <div className="text-center mb-12 animate-fade-in">
-          <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-4 font-display">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
             Why Businesses Choose AppMaster
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             Built with your success in mind, backed by cutting-edge technology
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-7xl mx-auto">
           {benefits.map((benefit, index) => (
             <div
               key={index}
-              className="group p-6 bg-card/80 backdrop-blur-sm rounded-xl border border-border hover:border-primary/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 animate-fade-in"
-              style={{ animationDelay: `${index * 0.05}s` }}
+              className="group p-4 bg-card/80 backdrop-blur-sm rounded-xl border border-border hover:border-primary/30 hover:shadow-xl transition-all"
             >
-              <div className="p-3 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 w-fit mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-                <benefit.icon className="h-6 w-6 text-primary" strokeWidth={2} />
+              <div className="p-2 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 w-fit mb-3 group-hover:scale-110 group-hover:rotate-3 transition-all">
+                <benefit.icon className="h-5 w-5 text-primary" />
               </div>
-              <h3 className="text-base font-semibold text-foreground mb-3 group-hover:text-primary transition-colors">
+              <h3 className="text-base font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
                 {benefit.title}
               </h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
