@@ -155,7 +155,7 @@ const Login = () => {
                   className="mt-1"
                 />
               </div>
-              <div className="flex justify-center pt-1">
+              <div className="flex justify-end pt-1">
                 <Button type="submit" className="w-40" disabled={loading}>
                   {loading ? "Logging in..." : "Login"}
                 </Button>
