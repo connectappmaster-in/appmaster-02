@@ -28,10 +28,10 @@ const Hero = () => {
     path: "/apps/invoicing"
   }, {
     icon: Ticket,
-    name: "IT Help Desk",
+    name: "HelpDesk",
     description: "Streamline customer support with ticket management",
     color: "text-cyan-600",
-    path: "/apps/it-help-desk"
+    path: "/apps/helpdesk"
   }, {
     icon: CreditCard,
     name: "Subscriptions",

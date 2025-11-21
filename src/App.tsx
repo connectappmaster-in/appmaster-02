@@ -20,7 +20,7 @@ import NotFound from "./pages/NotFound";
 import Depreciation from "./pages/depreciation";
 import Invoicing from "./pages/invoicing";
 import Attendance from "./pages/attendance";
-import ITHelpDesk from "./pages/it-help-desk";
+import HelpDesk from "./pages/helpdesk";
 import Subscriptions from "./pages/subscriptions";
 import SubscriptionsDashboardPage from "./pages/subscriptions/dashboard";
 import SubscriptionsToolsPage from "./pages/subscriptions/tools";
@@ -120,7 +120,7 @@ const App = () => {
           <Route path="/depreciation" element={<ToolAccessGuard toolKey="assets"><Depreciation /></ToolAccessGuard>} />
           <Route path="/invoicing" element={<ToolAccessGuard toolKey="invoicing"><Invoicing /></ToolAccessGuard>} />
           <Route path="/attendance" element={<ToolAccessGuard toolKey="attendance"><Attendance /></ToolAccessGuard>} />
-          <Route path="/it-help-desk" element={<ToolAccessGuard toolKey="it_help_desk"><ITHelpDesk /></ToolAccessGuard>} />
+          <Route path="/helpdesk" element={<ToolAccessGuard toolKey="helpdesk"><HelpDesk /></ToolAccessGuard>} />
           <Route path="/subscriptions" element={<Subscriptions />}>
             <Route index element={<SubscriptionsDashboardPage />} />
             <Route path="tools" element={<SubscriptionsToolsPage />} />
