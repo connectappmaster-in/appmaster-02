@@ -3,35 +3,20 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { 
-  Users, Ticket, TrendingUp, 
-  Calendar, FileText, Briefcase, LucideIcon, Package
-} from "lucide-react";
+import { Package } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useQuery } from "@tanstack/react-query";
+import { TOOL_ICONS } from "@/lib/icons";
 
 interface Tool {
   key: string;
   name: string;
-  icon: LucideIcon;
   path: string;
   color: string;
   description: string;
 }
-
-const TOOL_ICONS: Record<string, LucideIcon> = {
-  assets: Briefcase,
-  attendance: Calendar,
-  crm: Users,
-  invoicing: FileText,
-  it_help_desk: Ticket,
-  subscriptions: TrendingUp,
-  inventory: Package,
-  marketing: TrendingUp,
-  recruitment: Users,
-};
 
 interface AddToolsDialogProps {
   open: boolean;
@@ -110,8 +95,8 @@ export const AddToolsDialog = ({ open, onOpenChange, selectedTools, onToolsUpdat
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl">
         <DialogHeader>
-          <DialogTitle>Add Tools to Your Dashboard</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-xl font-semibold">Add Tools to Your Dashboard</DialogTitle>
+          <DialogDescription className="text-sm">
             Select the tools you want to see on your personal dashboard
           </DialogDescription>
         </DialogHeader>
@@ -119,19 +104,18 @@ export const AddToolsDialog = ({ open, onOpenChange, selectedTools, onToolsUpdat
         <ScrollArea className="h-[400px] pr-4">
           {isLoading ? (
             <div className="flex items-center justify-center py-8">
-              <div className="text-muted-foreground">Loading tools...</div>
+              <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary border-t-transparent"></div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {availableTools.map((tool) => {
-                const Icon = TOOL_ICONS[tool.key] || Package;
+                const Icon = TOOL_ICONS[tool.key]?.icon || Package;
                 const isSelected = tempSelectedTools.includes(tool.key);
-                const colorClasses = `hsl(var(--primary))`;
                 
                 return (
                   <div
                     key={tool.key}
-                    className={`flex items-start space-x-3 p-4 rounded-lg border-2 transition-all cursor-pointer hover:border-primary/50 ${
+                    className={`flex items-start space-x-3 p-3 rounded-lg border transition-all duration-[var(--transition-fast)] cursor-pointer hover:border-primary/50 hover:bg-accent/50 ${
                       isSelected ? 'border-primary bg-primary/5' : 'border-border'
                     }`}
                     onClick={() => handleToggleTool(tool.key)}
@@ -141,14 +125,14 @@ export const AddToolsDialog = ({ open, onOpenChange, selectedTools, onToolsUpdat
                       onCheckedChange={() => handleToggleTool(tool.key)}
                       className="mt-1"
                     />
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                        <div className="w-7 h-7 rounded-md bg-primary/10 flex items-center justify-center flex-shrink-0">
                           <Icon className="w-4 h-4 text-primary" />
                         </div>
-                        <h4 className="font-semibold">{tool.name}</h4>
+                        <h4 className="font-medium text-sm truncate">{tool.name}</h4>
                       </div>
-                      <p className="text-sm text-muted-foreground">{tool.description || 'No description available'}</p>
+                      <p className="text-xs text-muted-foreground line-clamp-2">{tool.description || 'No description available'}</p>
                     </div>
                   </div>
                 );
@@ -158,10 +142,10 @@ export const AddToolsDialog = ({ open, onOpenChange, selectedTools, onToolsUpdat
         </ScrollArea>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={saving}>
+          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={saving} size="sm">
             Cancel
           </Button>
-          <Button onClick={handleSave} disabled={saving}>
+          <Button onClick={handleSave} disabled={saving} size="sm">
             {saving ? "Saving..." : "Save Tools"}
           </Button>
         </DialogFooter>

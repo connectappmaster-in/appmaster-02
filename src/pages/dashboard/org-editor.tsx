@@ -3,14 +3,10 @@ import { useOrganisation } from "@/contexts/OrganisationContext";
 import { Navigate } from "react-router-dom";
 import { DashboardHeader } from "@/components/Dashboard/DashboardHeader";
 import { ToolCard } from "@/components/Dashboard/ToolCard";
-import { 
-  Users, Package,
-  Calendar, FileText, Briefcase,
-  Ticket,
-  PackageSearch
-} from "lucide-react";
+import { Package } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { TOOL_ICONS } from "@/lib/icons";
 
 const OrgEditorDashboard = () => {
   const { user, accountType, userRole, loading } = useAuth();
@@ -73,51 +69,43 @@ const OrgEditorDashboard = () => {
 
   const activeTools = organisation?.active_tools || [];
   
-  // Map tool keys to their icons and paths
-  const toolIconMap: Record<string, { icon: any; path: string; color: string }> = {
-    crm: { icon: Users, path: "/crm", color: "text-blue-500" },
-    invoicing: { icon: FileText, path: "/invoicing", color: "text-yellow-500" },
-    assets: { icon: Briefcase, path: "/assets", color: "text-indigo-500" },
-    attendance: { icon: Calendar, path: "/attendance", color: "text-purple-500" },
-    subscriptions: { icon: PackageSearch, path: "/subscriptions", color: "text-pink-500" },
-    it_help_desk: { icon: Ticket, path: "/it-help-desk", color: "text-red-500" },
-  };
-  
   // Filter tools: show only tools that are BOTH active in org AND assigned to user
   const availableTools = userAssignedTools
     .filter(tool => activeTools.includes(tool.key))
-    .map(tool => ({
-      key: tool.key,
-      name: tool.name,
-      icon: toolIconMap[tool.key]?.icon || Package,
-      path: toolIconMap[tool.key]?.path || `/${tool.key}`,
-      color: toolIconMap[tool.key]?.color || "text-gray-500",
-    }));
+    .map(tool => {
+      const toolConfig = TOOL_ICONS[tool.key];
+      return {
+        key: tool.key,
+        name: tool.name,
+        icon: toolConfig?.icon || Package,
+        path: toolConfig?.path || `/${tool.key}`,
+        color: toolConfig?.gradient || "from-gray-500 to-gray-600",
+      };
+    });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+    <div className="min-h-screen bg-background">
       <DashboardHeader />
       
-      <div className="container mx-auto px-6 py-8 space-y-8 animate-fade-in">
+      <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
         {/* Header Section */}
-        <div className="space-y-2">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-primary to-primary/60 bg-clip-text text-transparent animate-fade-in">
+        <div className="space-y-1">
+          <h1 className="text-2xl sm:text-3xl font-semibold text-foreground">
             {organisation?.name}
           </h1>
-          <p className="text-base text-muted-foreground animate-fade-in" style={{ animationDelay: '0.1s' }}>
-            {role === 'employee' ? '👋 Welcome back! Here are your daily tools' : '📊 Operational Dashboard'}
+          <p className="text-sm text-muted-foreground">
+            {role === 'employee' ? 'Welcome back! Here are your daily tools' : 'Operational Dashboard'}
           </p>
         </div>
 
         {/* Tools Section */}
-        <div className="space-y-6 animate-fade-in" style={{ animationDelay: '0.4s' }}>
+        <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-3xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+              <h2 className="text-lg font-semibold text-foreground">
                 {role === 'employee' ? 'Your Tools' : 'Available Tools'}
               </h2>
-              <p className="text-sm text-muted-foreground mt-2 flex items-center gap-2">
-                <span className="inline-block w-2 h-2 rounded-full bg-primary animate-pulse" />
+              <p className="text-xs text-muted-foreground mt-1">
                 {availableTools.length > 0 
                   ? `${availableTools.length} tool${availableTools.length !== 1 ? 's' : ''} available`
                   : 'No tools assigned yet'}
@@ -127,38 +115,33 @@ const OrgEditorDashboard = () => {
 
           {isLoadingTools ? (
             <div className="flex items-center justify-center py-16">
-              <div className="flex flex-col items-center gap-4">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-                <p className="text-muted-foreground">Loading your tools...</p>
+              <div className="flex flex-col items-center gap-3">
+                <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary border-t-transparent"></div>
+                <p className="text-sm text-muted-foreground">Loading your tools...</p>
               </div>
             </div>
           ) : availableTools.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 px-4">
-              <div className="w-24 h-24 rounded-full bg-muted/50 flex items-center justify-center mb-6">
-                <Package className="w-12 h-12 text-muted-foreground" />
+              <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                <Package className="w-8 h-8 text-muted-foreground" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">No Tools Assigned</h3>
-              <p className="text-muted-foreground text-center max-w-md">
+              <h3 className="text-base font-semibold mb-1">No Tools Assigned</h3>
+              <p className="text-sm text-muted-foreground text-center max-w-md">
                 Contact your organization admin to get access to tools and start working.
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {availableTools.map((tool, index) => (
-                <div 
-                  key={tool.key} 
-                  className="animate-fade-in"
-                  style={{ animationDelay: `${0.5 + index * 0.1}s` }}
-                >
-                  <ToolCard
-                    name={tool.name}
-                    icon={tool.icon}
-                    path={tool.path}
-                    color={tool.color}
-                    isActive={true}
-                    isLocked={false}
-                  />
-                </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {availableTools.map((tool) => (
+                <ToolCard
+                  key={tool.key}
+                  name={tool.name}
+                  icon={tool.icon}
+                  path={tool.path}
+                  color={tool.color}
+                  isActive={true}
+                  isLocked={false}
+                />
               ))}
             </div>
           )}

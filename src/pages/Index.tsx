@@ -7,8 +7,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { DashboardHeader } from "@/components/Dashboard/DashboardHeader";
 import { StatsCard } from "@/components/Dashboard/StatsCard";
 import { ToolCard } from "@/components/Dashboard/ToolCard";
-import { Users, Package, TrendingUp, CreditCard, BarChart3, Clock, Ticket, FileText, PackageSearch, ShoppingCart } from "lucide-react";
+import { Users, TrendingUp, Ticket } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { TOOL_ICONS } from "@/lib/icons";
 
 const Index = () => {
   const { user, loading: authLoading } = useAuth();
@@ -95,14 +96,13 @@ const Index = () => {
     }
   };
 
-  const tools = [
-    { key: "crm", name: "CRM", icon: BarChart3, path: "/crm", color: "from-indigo-500 to-purple-500" },
-    { key: "invoicing", name: "Invoicing", icon: FileText, path: "/invoicing", color: "from-blue-500 to-cyan-500" },
-    { key: "attendance", name: "Attendance", icon: Users, path: "/attendance", color: "from-purple-500 to-pink-500" },
-    { key: "it_help_desk", name: "IT Help Desk", icon: Ticket, path: "/it-help-desk", color: "from-cyan-500 to-blue-500" },
-    { key: "assets", name: "Assets", icon: Package, path: "/assets", color: "from-emerald-500 to-teal-500" },
-    { key: "subscriptions", name: "Subscriptions", icon: PackageSearch, path: "/subscriptions", color: "from-orange-500 to-red-500" },
-  ];
+  const tools = Object.entries(TOOL_ICONS).map(([key, config]) => ({
+    key,
+    name: key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+    icon: config.icon,
+    path: config.path,
+    color: config.gradient,
+  }));
 
   const maxTools = subscription?.subscription_plans?.max_tools || 1;
   const activeTools = organisation?.active_tools || [];
@@ -118,26 +118,26 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <DashboardHeader />
-      <main className="container mx-auto px-4 py-4">
-        <div className="mb-4">
-          <h1 className="text-2xl font-bold mb-1">Dashboard</h1>
+      <main className="container mx-auto px-4 sm:px-6 py-6">
+        <div className="mb-6">
+          <h1 className="text-2xl font-semibold mb-1">Dashboard</h1>
           <p className="text-sm text-muted-foreground">Welcome back! Here's an overview of your business.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-          <StatsCard title="Active Users" value={stats?.users || 0} icon={Users} color="from-blue-500 to-cyan-500" />
-          <StatsCard title="CRM Leads" value={stats?.leads || 0} icon={TrendingUp} color="from-purple-500 to-pink-500" />
-          <StatsCard title="Open Support Tickets" value={stats?.tickets || 0} icon={Ticket} color="from-orange-500 to-red-500" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <StatsCard title="Active Users" value={stats?.users || 0} icon={Users} color="from-blue-500 to-blue-600" />
+          <StatsCard title="CRM Leads" value={stats?.leads || 0} icon={TrendingUp} color="from-emerald-500 to-emerald-600" />
+          <StatsCard title="Open Support Tickets" value={stats?.tickets || 0} icon={Ticket} color="from-cyan-500 to-cyan-600" />
         </div>
 
         <div className="mb-4">
-          <h2 className="text-xl font-bold mb-3">Your Tools</h2>
-          <p className="text-sm text-muted-foreground mb-3">
+          <h2 className="text-lg font-semibold mb-1">Your Tools</h2>
+          <p className="text-xs text-muted-foreground mb-4">
             Using {activeTools.length} of {maxTools === -1 ? "unlimited" : maxTools} tools
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {tools.map((tool) => {
             const isActive = activeTools.includes(tool.key);
             const isLocked = !isActive && activeTools.length >= maxTools && maxTools !== -1;
