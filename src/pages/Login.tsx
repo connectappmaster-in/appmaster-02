@@ -2,12 +2,9 @@ import { useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import logo from "@/assets/appmaster-logo.png";
 
 const Login = () => {
   const [isSignup, setIsSignup] = useState(false);
@@ -118,140 +115,152 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-accent/10 to-background p-4">
-      <Card className="w-full max-w-md p-6 animate-fade-in">
-        <div className="text-center mb-6">
-          <div className="flex items-center justify-center mb-3">
-            <img src={logo} alt="AppMaster" className="h-12 w-auto" />
-          </div>
-          <p className="text-sm text-muted-foreground">Manage your business in one place</p>
-        </div>
-
-        {!isSignup ? (
-          /* Login Form */
-          <>
-            <form onSubmit={handleLogin} className="space-y-3">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-purple-700 to-pink-600 p-4 relative overflow-hidden">
+      {/* Decorative background elements */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-600/20 via-transparent to-transparent"></div>
+      
+      {!isSignup ? (
+        /* Login Form */
+        <div className="w-full max-w-md relative">
+          <div className="backdrop-blur-xl bg-white/10 rounded-3xl border border-white/20 shadow-2xl p-10 animate-fade-in">
+            <h1 className="text-4xl font-bold text-white text-center mb-8">Login</h1>
+            
+            <form onSubmit={handleLogin} className="space-y-6">
               <div>
-                <Label htmlFor="login-email" className="text-sm">Email</Label>
-                <Input
+                <label htmlFor="login-email" className="block text-white text-sm mb-2">Email</label>
+                <input
                   id="login-email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  placeholder="you@company.com"
-                  className="mt-1"
+                  placeholder=""
+                  className="w-full bg-transparent border-0 border-b-2 border-white/50 text-white placeholder:text-white/50 focus:border-white focus:outline-none px-0 py-2 transition-colors"
                 />
               </div>
+              
               <div>
-                <Label htmlFor="login-password" className="text-sm">Password</Label>
-                <Input
+                <label htmlFor="login-password" className="block text-white text-sm mb-2">Password</label>
+                <input
                   id="login-password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  placeholder="••••••••"
-                  className="mt-1"
+                  placeholder=""
+                  className="w-full bg-transparent border-0 border-b-2 border-white/50 text-white placeholder:text-white/50 focus:border-white focus:outline-none px-0 py-2 transition-colors"
                 />
               </div>
-              <div className="flex justify-end pt-1">
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Logging in..." : "Login"}
-                </Button>
-              </div>
-              <div className="flex items-center justify-between text-xs pt-1">
-                <Link to="/password-reset" className="text-primary hover:underline">
-                  Forgot password?
+              
+              <div className="flex items-center justify-between text-sm">
+                <label className="flex items-center text-white cursor-pointer">
+                  <input type="checkbox" className="mr-2 rounded border-white/50" />
+                  Remember Me
+                </label>
+                <Link to="/password-reset" className="text-white hover:underline">
+                  Forget Password
                 </Link>
-                <div className="text-muted-foreground">
-                  Don't have an account?{" "}
-                  <button
-                    onClick={() => setIsSignup(true)}
-                    className="text-primary hover:underline font-medium"
-                  >
-                    Sign up
-                  </button>
-                </div>
               </div>
+              
+              <Button 
+                type="submit" 
+                className="w-full bg-white text-purple-900 hover:bg-white/90 rounded-full py-6 font-semibold text-base shadow-lg transition-all duration-200" 
+                disabled={loading}
+              >
+                {loading ? "Logging in..." : "Log in"}
+              </Button>
+              
+              <p className="text-center text-white text-sm">
+                Don't have a account{" "}
+                <button
+                  type="button"
+                  onClick={() => setIsSignup(true)}
+                  className="font-semibold hover:underline"
+                >
+                  Register
+                </button>
+              </p>
             </form>
-          </>
-        ) : (
-          /* Sign Up Form */
-          <>
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-base font-semibold">Create Account</h3>
+          </div>
+        </div>
+      ) : (
+        /* Sign Up Form */
+        <div className="w-full max-w-md relative">
+          <div className="backdrop-blur-xl bg-white/10 rounded-3xl border border-white/20 shadow-2xl p-10 animate-fade-in">
+            <div className="flex items-center justify-between mb-6">
+              <h1 className="text-3xl font-bold text-white">Create Account</h1>
               <button
+                type="button"
                 onClick={() => setIsSignup(false)}
-                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                className="text-white/80 hover:text-white text-sm transition-colors"
               >
                 Back to Login
               </button>
             </div>
 
-            <form onSubmit={handleSignup} className="space-y-3">
+            <form onSubmit={handleSignup} className="space-y-5">
               {/* Account Type Toggle */}
               <div>
-                <Label className="text-xs text-muted-foreground mb-1.5 block">Account Type</Label>
+                <Label className="text-white text-sm mb-2 block">Account Type</Label>
                 <ToggleGroup 
                   type="single" 
                   value={accountType}
                   onValueChange={(value) => value && setAccountType(value as 'personal' | 'organization')}
-                  className="justify-start"
+                  className="justify-start bg-white/10 rounded-lg p-1"
                 >
-                  <ToggleGroupItem value="personal" className="flex-1">
+                  <ToggleGroupItem value="personal" className="flex-1 data-[state=on]:bg-white data-[state=on]:text-purple-900 text-white">
                     Individual
                   </ToggleGroupItem>
-                  <ToggleGroupItem value="organization" className="flex-1">
+                  <ToggleGroupItem value="organization" className="flex-1 data-[state=on]:bg-white data-[state=on]:text-purple-900 text-white">
                     Organization
                   </ToggleGroupItem>
                 </ToggleGroup>
               </div>
 
               <div>
-                <Label htmlFor="signup-name" className="text-sm">Full Name</Label>
-                <Input
+                <label htmlFor="signup-name" className="block text-white text-sm mb-2">Full Name</label>
+                <input
                   id="signup-name"
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
                   placeholder="John Doe"
-                  className="mt-1"
+                  className="w-full bg-transparent border-0 border-b-2 border-white/50 text-white placeholder:text-white/50 focus:border-white focus:outline-none px-0 py-2 transition-colors"
                 />
               </div>
 
               {accountType === 'organization' && (
                 <div className="animate-fade-in">
-                  <Label htmlFor="signup-org" className="text-sm">Organisation Name</Label>
-                  <Input
+                  <label htmlFor="signup-org" className="block text-white text-sm mb-2">Organisation Name</label>
+                  <input
                     id="signup-org"
                     type="text"
                     value={orgName}
                     onChange={(e) => setOrgName(e.target.value)}
                     required
                     placeholder="Acme Corp"
-                    className="mt-1"
+                    className="w-full bg-transparent border-0 border-b-2 border-white/50 text-white placeholder:text-white/50 focus:border-white focus:outline-none px-0 py-2 transition-colors"
                   />
                 </div>
               )}
 
               <div>
-                <Label htmlFor="signup-email" className="text-sm">Email</Label>
-                <Input
+                <label htmlFor="signup-email" className="block text-white text-sm mb-2">Email</label>
+                <input
                   id="signup-email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   placeholder="you@company.com"
-                  className="mt-1"
+                  className="w-full bg-transparent border-0 border-b-2 border-white/50 text-white placeholder:text-white/50 focus:border-white focus:outline-none px-0 py-2 transition-colors"
                 />
               </div>
 
               <div>
-                <Label htmlFor="signup-password" className="text-sm">Password</Label>
-                <Input
+                <label htmlFor="signup-password" className="block text-white text-sm mb-2">Password</label>
+                <input
                   id="signup-password"
                   type="password"
                   value={password}
@@ -259,13 +268,13 @@ const Login = () => {
                   required
                   placeholder="••••••••"
                   minLength={6}
-                  className="mt-1"
+                  className="w-full bg-transparent border-0 border-b-2 border-white/50 text-white placeholder:text-white/50 focus:border-white focus:outline-none px-0 py-2 transition-colors"
                 />
               </div>
 
               <div>
-                <Label htmlFor="confirm-password" className="text-sm">Confirm Password</Label>
-                <Input
+                <label htmlFor="confirm-password" className="block text-white text-sm mb-2">Confirm Password</label>
+                <input
                   id="confirm-password"
                   type="password"
                   value={confirmPassword}
@@ -273,19 +282,21 @@ const Login = () => {
                   required
                   placeholder="••••••••"
                   minLength={6}
-                  className="mt-1"
+                  className="w-full bg-transparent border-0 border-b-2 border-white/50 text-white placeholder:text-white/50 focus:border-white focus:outline-none px-0 py-2 transition-colors"
                 />
               </div>
 
-              <div className="flex justify-center pt-1">
-                <Button type="submit" className="w-40" disabled={loading}>
-                  {loading ? "Creating account..." : "Create Account"}
-                </Button>
-              </div>
+              <Button 
+                type="submit" 
+                className="w-full bg-white text-purple-900 hover:bg-white/90 rounded-full py-6 font-semibold text-base shadow-lg transition-all duration-200 mt-6" 
+                disabled={loading}
+              >
+                {loading ? "Creating account..." : "Create Account"}
+              </Button>
             </form>
-          </>
-        )}
-      </Card>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
