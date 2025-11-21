@@ -31,7 +31,7 @@ const Hero = () => {
     name: "IT Help Desk",
     description: "Streamline customer support with ticket management",
     color: "text-cyan-600",
-    path: "/apps/tickets"
+    path: "/apps/it-help-desk"
   }, {
     icon: CreditCard,
     name: "Subscriptions",

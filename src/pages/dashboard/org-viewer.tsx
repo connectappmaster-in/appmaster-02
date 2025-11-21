@@ -23,7 +23,7 @@ const OrgViewerDashboard = () => {
       
       const [leadsCount, ticketsCount, usersCount] = await Promise.all([
         supabase.from("crm_leads").select("*", { count: "exact", head: true }).eq("organisation_id", organisation.id),
-        supabase.from("crm_contacts").select("*", { count: "exact", head: true }).eq("organisation_id", organisation.id),
+        supabase.from("tickets").select("*", { count: "exact", head: true }).eq("organisation_id", organisation.id),
         supabase.from("users").select("*", { count: "exact", head: true }).eq("organisation_id", organisation.id).eq("status", "active"),
       ]);
 
@@ -80,7 +80,7 @@ const OrgViewerDashboard = () => {
             color="from-green-500 to-green-600"
           />
           <StatsCard
-            title="Total Contacts"
+            title="Support Tickets"
             value={stats?.tickets || 0}
             icon={Ticket}
             color="from-orange-500 to-orange-600"

@@ -98,7 +98,7 @@ const OrgEditorDashboard = () => {
     assets: { icon: Briefcase, path: "/assets", color: "text-indigo-500" },
     attendance: { icon: Calendar, path: "/attendance", color: "text-purple-500" },
     subscriptions: { icon: TrendingUp, path: "/subscriptions", color: "text-pink-500" },
-    tickets: { icon: Ticket, path: "/tickets", color: "text-red-500" },
+    it_help_desk: { icon: Ticket, path: "/it-help-desk", color: "text-red-500" },
   };
   
   // Filter tools: show only tools that are BOTH active in org AND assigned to user
