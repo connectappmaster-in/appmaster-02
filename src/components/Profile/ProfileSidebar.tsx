@@ -21,18 +21,18 @@ export const ProfileSidebar = () => {
   });
 
   return (
-    <aside className="bg-background min-h-screen border-r border-border" style={{ width: "180px", minWidth: "180px", maxWidth: "180px" }}>
-      <nav className="space-y-1 px-2 py-3">
+    <aside className="bg-card min-h-screen border-r" style={{ width: "200px", minWidth: "200px", maxWidth: "200px" }}>
+      <nav className="space-y-1 px-3 py-4">
         {visibleItems.map((item) => (
           <NavLink
             key={item.path}
             to={item.path}
             end={item.path === "/profile"}
             className={cn(
-              "flex items-center h-9 rounded-lg px-3 text-sm font-medium transition-colors",
-              "hover:bg-accent/50 hover:text-primary"
+              "flex items-center h-9 rounded-md px-3 text-sm font-medium transition-all duration-[var(--transition-fast)]",
+              "hover:bg-accent hover:text-accent-foreground"
             )}
-            activeClassName="bg-accent text-primary"
+            activeClassName="bg-primary/10 text-primary border-l-2 border-primary"
           >
             <item.icon className="h-4 w-4 mr-3" />
             <span>{item.title}</span>
