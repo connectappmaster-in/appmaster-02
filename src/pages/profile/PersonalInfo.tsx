@@ -117,10 +117,10 @@ const PersonalInfo = () => {
       <div className="flex pt-14 h-full overflow-hidden">
         <ProfileSidebar />
       <main className="flex-1 overflow-y-auto">
-        <div className="max-w-4xl mx-auto px-6 py-8 space-y-6">
+        <div className="max-w-4xl mx-auto px-4 py-4 space-y-4">
           <div>
-            <h1 className="text-3xl font-normal">Personal info</h1>
-            <p className="text-muted-foreground mt-2">
+            <h1 className="text-2xl font-normal">Personal info</h1>
+            <p className="text-muted-foreground mt-1">
               Info about you and your preferences across our services
             </p>
           </div>
@@ -134,7 +134,7 @@ const PersonalInfo = () => {
               </CardDescription>
             </CardHeader>
             <CardContent className="flex items-center gap-6">
-              <Avatar className="h-24 w-24 border-4 border-primary/20">
+              <Avatar className="h-20 w-20 border-4 border-primary/20">
                 <AvatarImage src={profile?.avatar_url || ""} />
                 <AvatarFallback className="bg-gradient-to-br from-primary to-primary/60 text-primary-foreground text-2xl font-bold">
                   {getInitials()}
@@ -161,7 +161,7 @@ const PersonalInfo = () => {
               )}
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="grid gap-6">
+              <div className="grid gap-4">
                 <div className="space-y-2">
                   <Label className="flex items-center gap-2">
                     <User className="h-4 w-4" />

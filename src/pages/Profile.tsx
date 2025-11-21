@@ -241,10 +241,10 @@ const Profile = () => {
 
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto">
-        <div className="max-w-5xl mx-auto px-6 py-8 space-y-8">
+        <div className="max-w-5xl mx-auto px-4 py-4 space-y-4">
           {/* Header Section */}
-          <div className="text-center space-y-4">
-            <Avatar className="h-24 w-24 mx-auto border-4 border-primary/20">
+          <div className="text-center space-y-3">
+            <Avatar className="h-20 w-20 mx-auto border-4 border-primary/20">
               <AvatarImage src={profile?.avatar_url || ""} />
               <AvatarFallback className="bg-gradient-to-br from-primary to-primary/60 text-primary-foreground text-3xl font-bold">
                 {getInitials(userData?.name)}
@@ -252,10 +252,10 @@ const Profile = () => {
             </Avatar>
             
             <div>
-              <h1 className="text-3xl font-normal text-foreground">
+              <h1 className="text-2xl font-normal text-foreground">
                 Welcome, {formData.name || "User"}
               </h1>
-              <p className="text-sm text-muted-foreground mt-2">
+              <p className="text-sm text-muted-foreground mt-1">
                 Manage your info, privacy, and security to make our app work better for you.
               </p>
             </div>
@@ -273,7 +273,7 @@ const Profile = () => {
           
 
           {/* Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Profile & Personalization Card */}
             <ProfileCard title="Profile & personalization" description="See your profile data and manage your account information" icon={<div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center">
                   <Settings className="h-8 w-8 text-white" />

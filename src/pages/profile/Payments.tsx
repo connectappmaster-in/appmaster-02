@@ -104,11 +104,11 @@ const Payments = () => {
         <ProfileSidebar />
       
       <main className="flex-1 overflow-y-auto">
-        <div className="max-w-5xl mx-auto px-6 py-8 space-y-8">
+        <div className="max-w-5xl mx-auto px-4 py-4 space-y-4">
           {/* Header */}
           <div>
-            <h1 className="text-3xl font-semibold text-foreground">Payments & Billing</h1>
-            <p className="text-muted-foreground mt-2">
+            <h1 className="text-2xl font-semibold text-foreground">Payments & Billing</h1>
+            <p className="text-muted-foreground mt-1">
               Manage your subscription, payment methods, and billing history
             </p>
           </div>

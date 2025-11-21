@@ -40,13 +40,13 @@ const Security = () => {
       <div className="flex pt-14 h-full overflow-hidden">
         <ProfileSidebar />
       <main className="flex-1 overflow-y-auto">
-        <div className="max-w-4xl mx-auto px-6 py-8 space-y-6">
+        <div className="max-w-4xl mx-auto px-4 py-4 space-y-4">
           <div>
-            <h1 className="text-3xl font-normal">Security</h1>
+            <h1 className="text-2xl font-normal">Security</h1>
             
           </div>
 
-          <div className="grid gap-6">
+          <div className="grid gap-4">
             <ProfileCard title="Password" description="A strong password helps prevent unauthorized access" icon={<div className="w-12 h-12 bg-blue-500/10 rounded-full flex items-center justify-center">
                   <Lock className="h-6 w-6 text-blue-600" />
                 </div>} actionLabel="Change password" onAction={() => setIsPasswordDialogOpen(true)}>

@@ -10,15 +10,15 @@ const Privacy = () => {
       <div className="flex pt-14 h-full overflow-hidden">
         <ProfileSidebar />
       <main className="flex-1 overflow-y-auto">
-        <div className="max-w-4xl mx-auto px-6 py-8 space-y-6">
+        <div className="max-w-4xl mx-auto px-4 py-4 space-y-4">
           <div>
-            <h1 className="text-3xl font-normal">Privacy & personalization</h1>
-            <p className="text-muted-foreground mt-2">
+            <h1 className="text-2xl font-normal">Privacy & personalization</h1>
+            <p className="text-muted-foreground mt-1">
               Choose what info is shown and control your data
             </p>
           </div>
 
-          <div className="grid gap-6">
+          <div className="grid gap-4">
             <ProfileCard
               title="Activity controls"
               description="Decide what activity is saved to your account"
