@@ -13,93 +13,84 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { format } from "date-fns";
 import { AddToolDialog } from "./AddToolDialog";
 import { useToast } from "@/hooks/use-toast";
-
 export const ToolsList = () => {
-  const { organisation } = useOrganisation();
-  const { toast } = useToast();
+  const {
+    organisation
+  } = useOrganisation();
+  const {
+    toast
+  } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [editingTool, setEditingTool] = useState<any | null>(null);
-
-  const { data: tools, isLoading, refetch } = useQuery({
+  const {
+    data: tools,
+    isLoading,
+    refetch
+  } = useQuery({
     queryKey: ["subscriptions-tools", organisation?.id, searchTerm, statusFilter, categoryFilter],
     queryFn: async () => {
-      let query = supabase
-        .from("subscriptions_tools")
-        .select("*, subscriptions_vendors(vendor_name)")
-        .eq("organisation_id", organisation?.id!);
-
+      let query = supabase.from("subscriptions_tools").select("*, subscriptions_vendors(vendor_name)").eq("organisation_id", organisation?.id!);
       if (searchTerm) {
         query = query.ilike("tool_name", `%${searchTerm}%`);
       }
-
       if (statusFilter !== "all") {
         query = query.eq("status", statusFilter);
       }
-
       if (categoryFilter !== "all") {
         query = query.eq("category", categoryFilter);
       }
-
-      const { data, error } = await query.order("created_at", { ascending: false });
-
+      const {
+        data,
+        error
+      } = await query.order("created_at", {
+        ascending: false
+      });
       if (error) throw error;
       return data;
     },
-    enabled: !!organisation?.id,
+    enabled: !!organisation?.id
   });
-
   const handleDelete = async (id: string) => {
-    const { error } = await supabase
-      .from("subscriptions_tools")
-      .delete()
-      .eq("id", id);
-
+    const {
+      error
+    } = await supabase.from("subscriptions_tools").delete().eq("id", id);
     if (error) {
       toast({
         title: "Error",
         description: "Failed to delete tool",
-        variant: "destructive",
+        variant: "destructive"
       });
     } else {
       toast({
         title: "Success",
-        description: "Tool deleted successfully",
+        description: "Tool deleted successfully"
       });
       refetch();
     }
   };
-
   const getStatusBadge = (status: string) => {
     const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
       active: "default",
       trial: "secondary",
       expired: "destructive",
-      cancelled: "outline",
+      cancelled: "outline"
     };
     return <Badge variant={variants[status] || "default"}>{status}</Badge>;
   };
-
   const getDaysUntilRenewal = (renewalDate: string | null) => {
     if (!renewalDate) return null;
     const days = Math.ceil((new Date(renewalDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
     return days;
   };
-
-  return (
-    <div className="space-y-6">
+  return <div className="space-y-6">
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div className="flex-1 flex gap-4 flex-wrap">
           <div className="relative flex-1 min-w-[200px]">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input
-              placeholder="Search tools..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
+            <Input placeholder="Search tools..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-10" />
           </div>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
             <SelectTrigger className="w-[150px]">
@@ -136,9 +127,7 @@ export const ToolsList = () => {
       <Card>
         <CardHeader>
           <CardTitle>Tools & Subscriptions</CardTitle>
-          <CardDescription>
-            Manage all your software tools and SaaS subscriptions
-          </CardDescription>
+          
         </CardHeader>
         <CardContent>
           <Table>
@@ -155,25 +144,18 @@ export const ToolsList = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {isLoading ? (
-                <TableRow>
+              {isLoading ? <TableRow>
                   <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
                     Loading...
                   </TableCell>
-                </TableRow>
-              ) : !tools || tools.length === 0 ? (
-                <TableRow>
+                </TableRow> : !tools || tools.length === 0 ? <TableRow>
                   <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
                     No tools found. Add your first tool to get started.
                   </TableCell>
-                </TableRow>
-              ) : (
-                tools.map((tool) => {
-                  const daysUntilRenewal = getDaysUntilRenewal(tool.renewal_date);
-                  const isExpiringSoon = daysUntilRenewal !== null && daysUntilRenewal <= 7 && daysUntilRenewal > 0;
-
-                  return (
-                    <TableRow key={tool.id}>
+                </TableRow> : tools.map(tool => {
+              const daysUntilRenewal = getDaysUntilRenewal(tool.renewal_date);
+              const isExpiringSoon = daysUntilRenewal !== null && daysUntilRenewal <= 7 && daysUntilRenewal > 0;
+              return <TableRow key={tool.id}>
                       <TableCell className="font-medium">{tool.tool_name}</TableCell>
                       <TableCell>{tool.subscriptions_vendors?.vendor_name || "-"}</TableCell>
                       <TableCell>{tool.category || "-"}</TableCell>
@@ -184,18 +166,12 @@ export const ToolsList = () => {
                         {tool.subscription_type?.replace("_", " ")}
                       </TableCell>
                       <TableCell>
-                        {tool.renewal_date ? (
-                          <div className="flex flex-col gap-1">
+                        {tool.renewal_date ? <div className="flex flex-col gap-1">
                             <span className="text-sm">{format(new Date(tool.renewal_date), "MMM dd, yyyy")}</span>
-                            {daysUntilRenewal !== null && (
-                              <Badge variant={isExpiringSoon ? "destructive" : "secondary"} className="text-xs w-fit">
+                            {daysUntilRenewal !== null && <Badge variant={isExpiringSoon ? "destructive" : "secondary"} className="text-xs w-fit">
                                 {daysUntilRenewal > 0 ? `${daysUntilRenewal}d left` : "Expired"}
-                              </Badge>
-                            )}
-                          </div>
-                        ) : (
-                          "-"
-                        )}
+                              </Badge>}
+                          </div> : "-"}
                       </TableCell>
                       <TableCell>{getStatusBadge(tool.status)}</TableCell>
                       <TableCell className="text-right">
@@ -206,12 +182,10 @@ export const ToolsList = () => {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                          <DropdownMenuItem
-                            onClick={() => {
-                              setEditingTool(tool);
-                              setIsAddDialogOpen(true);
-                            }}
-                          >
+                          <DropdownMenuItem onClick={() => {
+                        setEditingTool(tool);
+                        setIsAddDialogOpen(true);
+                      }}>
                             <Edit className="w-4 h-4 mr-2" />
                             Edit
                           </DropdownMenuItem>
@@ -222,29 +196,21 @@ export const ToolsList = () => {
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>
-                    </TableRow>
-                  );
-                })
-              )}
+                    </TableRow>;
+            })}
             </TableBody>
           </Table>
         </CardContent>
       </Card>
 
-      <AddToolDialog
-        open={isAddDialogOpen}
-        onOpenChange={(open) => {
-          setIsAddDialogOpen(open);
-          if (!open) {
-            setEditingTool(null);
-          }
-        }}
-        onSuccess={() => {
-          refetch();
-          setEditingTool(null);
-        }}
-        editingTool={editingTool}
-      />
-    </div>
-  );
+      <AddToolDialog open={isAddDialogOpen} onOpenChange={open => {
+      setIsAddDialogOpen(open);
+      if (!open) {
+        setEditingTool(null);
+      }
+    }} onSuccess={() => {
+      refetch();
+      setEditingTool(null);
+    }} editingTool={editingTool} />
+    </div>;
 };
