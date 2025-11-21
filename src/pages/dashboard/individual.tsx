@@ -77,9 +77,6 @@ const IndividualDashboard = () => {
     invoicing: { icon: FileText, color: "text-yellow-500" },
     tickets: { icon: Ticket, color: "text-orange-500" },
     subscriptions: { icon: TrendingUp, color: "text-pink-500" },
-    inventory: { icon: Package, color: "text-green-500" },
-    marketing: { icon: TrendingUp, color: "text-rose-500" },
-    recruitment: { icon: Users, color: "text-cyan-500" },
   };
 
   const allTools = allToolsData.map(tool => ({

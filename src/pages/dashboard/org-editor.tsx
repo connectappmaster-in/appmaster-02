@@ -61,18 +61,16 @@ const OrgEditorDashboard = () => {
   const { data: stats } = useQuery({
     queryKey: ["org-editor-stats", organisation?.id],
     queryFn: async () => {
-      if (!organisation?.id) return { leads: 0, contacts: 0, inventory: 0 };
+      if (!organisation?.id) return { leads: 0, contacts: 0 };
       
-      const [leadsCount, contactsCount, inventoryCount] = await Promise.all([
+      const [leadsCount, contactsCount] = await Promise.all([
         supabase.from("crm_leads").select("*", { count: "exact", head: true }).eq("organisation_id", organisation.id),
         supabase.from("crm_contacts").select("*", { count: "exact", head: true }).eq("organisation_id", organisation.id),
-        supabase.from("inventory_items").select("*", { count: "exact", head: true }).eq("organisation_id", organisation.id),
       ]);
 
       return {
         leads: leadsCount.count || 0,
         contacts: contactsCount.count || 0,
-        inventory: inventoryCount.count || 0,
       };
     },
     enabled: !!user && !!organisation?.id,
@@ -96,14 +94,11 @@ const OrgEditorDashboard = () => {
   // Map tool keys to their icons and paths
   const toolIconMap: Record<string, { icon: any; path: string; color: string }> = {
     crm: { icon: Users, path: "/crm", color: "text-blue-500" },
-    inventory: { icon: Package, path: "/inventory", color: "text-green-500" },
     invoicing: { icon: FileText, path: "/invoicing", color: "text-yellow-500" },
     assets: { icon: Briefcase, path: "/assets", color: "text-indigo-500" },
     attendance: { icon: Calendar, path: "/attendance", color: "text-purple-500" },
     subscriptions: { icon: TrendingUp, path: "/subscriptions", color: "text-pink-500" },
     tickets: { icon: Ticket, path: "/tickets", color: "text-red-500" },
-    marketing: { icon: Megaphone, path: "/marketing", color: "text-orange-500" },
-    recruitment: { icon: Users, path: "/recruitment", color: "text-cyan-500" },
   };
   
   // Filter tools: show only tools that are BOTH active in org AND assigned to user
@@ -143,13 +138,6 @@ const OrgEditorDashboard = () => {
             icon={Users}
             color="from-orange-500 to-orange-600"
             onClick={() => window.location.href = '/crm/customers'}
-          />
-          <StatsCard
-            title="Inventory Items"
-            value={stats?.inventory || 0}
-            icon={Package}
-            color="from-green-500 to-green-600"
-            onClick={() => window.location.href = '/inventory'}
           />
         </div>
 

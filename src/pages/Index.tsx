@@ -42,17 +42,15 @@ const Index = () => {
     queryFn: async () => {
       if (!organisation) return null;
 
-      const [leads, tickets, inventory, users] = await Promise.all([
+      const [leads, tickets, users] = await Promise.all([
         supabase.from("crm_leads").select("id", { count: "exact", head: true }).eq("organisation_id", organisation.id),
         supabase.from("tickets").select("id", { count: "exact", head: true }).eq("organisation_id", organisation.id).eq("status", "open"),
-        supabase.from("inventory_items").select("id", { count: "exact", head: true }).eq("organisation_id", organisation.id),
         supabase.from("users").select("id", { count: "exact", head: true }).eq("organisation_id", organisation.id).eq("status", "active"),
       ]);
 
       return {
         leads: leads.count || 0,
         tickets: tickets.count || 0,
-        inventory: inventory.count || 0,
         users: users.count || 0,
       };
     },
@@ -99,11 +97,11 @@ const Index = () => {
 
   const tools = [
     { key: "crm", name: "CRM", icon: BarChart3, path: "/crm", color: "from-indigo-500 to-purple-500" },
-    { key: "inventory", name: "Inventory", icon: PackageSearch, path: "/inventory", color: "from-orange-500 to-red-500" },
     { key: "invoicing", name: "Invoicing", icon: FileText, path: "/invoicing", color: "from-blue-500 to-cyan-500" },
-    { key: "hr", name: "HR", icon: Users, path: "/attendance", color: "from-purple-500 to-pink-500" },
+    { key: "attendance", name: "Attendance", icon: Users, path: "/attendance", color: "from-purple-500 to-pink-500" },
     { key: "tickets", name: "Tickets", icon: Ticket, path: "/tickets", color: "from-cyan-500 to-blue-500" },
     { key: "assets", name: "Assets", icon: Package, path: "/assets", color: "from-emerald-500 to-teal-500" },
+    { key: "subscriptions", name: "Subscriptions", icon: PackageSearch, path: "/subscriptions", color: "from-orange-500 to-red-500" },
   ];
 
   const maxTools = subscription?.subscription_plans?.max_tools || 1;
@@ -126,11 +124,10 @@ const Index = () => {
           <p className="text-sm text-muted-foreground">Welcome back! Here's an overview of your business.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
           <StatsCard title="Active Users" value={stats?.users || 0} icon={Users} color="from-blue-500 to-cyan-500" />
           <StatsCard title="CRM Leads" value={stats?.leads || 0} icon={TrendingUp} color="from-purple-500 to-pink-500" />
           <StatsCard title="Open Tickets" value={stats?.tickets || 0} icon={Ticket} color="from-orange-500 to-red-500" />
-          <StatsCard title="Inventory Items" value={stats?.inventory || 0} icon={Package} color="from-emerald-500 to-teal-500" />
         </div>
 
         <div className="mb-4">

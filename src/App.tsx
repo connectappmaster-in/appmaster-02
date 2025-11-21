@@ -20,7 +20,6 @@ import NotFound from "./pages/NotFound";
 import Depreciation from "./pages/depreciation";
 import Invoicing from "./pages/invoicing";
 import Attendance from "./pages/attendance";
-import Recruitment from "./pages/recruitment";
 import Tickets from "./pages/tickets";
 import Subscriptions from "./pages/subscriptions";
 import SubscriptionsDashboardPage from "./pages/subscriptions/dashboard";
@@ -30,14 +29,12 @@ import SubscriptionsLicensesPage from "./pages/subscriptions/licenses";
 import SubscriptionsPaymentsPage from "./pages/subscriptions/payments";
 import Assets from "./pages/assets";
 import ShopIncomeExpense from "./pages/shop-income-expense";
-import Inventory from "./pages/inventory";
 import CRM from "./pages/crm";
 import LeadsListPage from "./pages/crm/leads";
 import NewLeadPage from "./pages/crm/leads/new";
 import CustomersListPage from "./pages/crm/customers";
 import OpportunitiesPage from "./pages/crm/opportunities";
 import QuotesListPage from "./pages/crm/quotes";
-import Marketing from "./pages/marketing";
 import PersonalExpense from "./pages/personal-expense";
 import Contact from "./pages/contact";
 import Admin from "./pages/admin/index";
@@ -123,7 +120,6 @@ const App = () => {
           <Route path="/depreciation" element={<ToolAccessGuard toolKey="assets"><Depreciation /></ToolAccessGuard>} />
           <Route path="/invoicing" element={<ToolAccessGuard toolKey="invoicing"><Invoicing /></ToolAccessGuard>} />
           <Route path="/attendance" element={<ToolAccessGuard toolKey="attendance"><Attendance /></ToolAccessGuard>} />
-          <Route path="/recruitment" element={<ToolAccessGuard toolKey="recruitment"><Recruitment /></ToolAccessGuard>} />
           <Route path="/tickets" element={<ToolAccessGuard toolKey="tickets"><Tickets /></ToolAccessGuard>} />
           <Route path="/subscriptions" element={<Subscriptions />}>
             <Route index element={<SubscriptionsDashboardPage />} />
@@ -134,14 +130,12 @@ const App = () => {
           </Route>
           <Route path="/assets" element={<ToolAccessGuard toolKey="assets"><Assets /></ToolAccessGuard>} />
           <Route path="/shop-income-expense" element={<ShopIncomeExpense />} />
-          <Route path="/inventory" element={<ToolAccessGuard toolKey="inventory"><Inventory /></ToolAccessGuard>} />
           <Route path="/crm" element={<ToolAccessGuard toolKey="crm"><CRM /></ToolAccessGuard>} />
           <Route path="/crm/leads" element={<ToolAccessGuard toolKey="crm"><LeadsListPage /></ToolAccessGuard>} />
           <Route path="/crm/leads/new" element={<ToolAccessGuard toolKey="crm"><NewLeadPage /></ToolAccessGuard>} />
           <Route path="/crm/customers" element={<ToolAccessGuard toolKey="crm"><CustomersListPage /></ToolAccessGuard>} />
           <Route path="/crm/opportunities" element={<ToolAccessGuard toolKey="crm"><OpportunitiesPage /></ToolAccessGuard>} />
           <Route path="/crm/quotes" element={<ToolAccessGuard toolKey="crm"><QuotesListPage /></ToolAccessGuard>} />
-          <Route path="/marketing" element={<ToolAccessGuard toolKey="marketing"><Marketing /></ToolAccessGuard>} />
           <Route path="/personal-expense" element={<PersonalExpense />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
