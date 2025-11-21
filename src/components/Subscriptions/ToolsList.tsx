@@ -125,10 +125,7 @@ export const ToolsList = () => {
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle>Tools & Subscriptions</CardTitle>
-          
-        </CardHeader>
+        
         <CardContent>
           <Table>
             <TableHeader>
