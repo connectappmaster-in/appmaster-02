@@ -46,7 +46,7 @@ const OrgEditorDashboard = () => {
           )
         `)
         .eq("user_id", userData.id)
-        .eq("tool.active", true);  // Only get active tools
+        .eq("tools.active", true);  // Use table name 'tools', not alias 'tool'
       
       if (error) {
         console.error("Error fetching user tools:", error);
