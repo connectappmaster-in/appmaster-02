@@ -23,24 +23,22 @@ export const ProfileCard = ({
   return (
     <Card className="border-border/50 hover:shadow-lg transition-shadow">
       <CardHeader>
-        <div className="flex items-start justify-between">
-          <div className="space-y-1 flex-1">
-            <CardTitle className="text-lg">{title}</CardTitle>
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex-1">
+            <div className="flex items-center justify-between gap-4 mb-1">
+              <CardTitle className="text-lg">{title}</CardTitle>
+              {icon && <div>{icon}</div>}
+            </div>
             <CardDescription className="text-sm">{description}</CardDescription>
+            {children && <div className="mt-3">{children}</div>}
+            {actionLabel && (
+              <Button variant="link" onClick={onAction} className="px-0 mt-2">
+                {actionLabel}
+              </Button>
+            )}
           </div>
-          {icon && <div className="ml-4">{icon}</div>}
         </div>
       </CardHeader>
-      {(children || actionLabel) && (
-        <CardContent>
-          {children}
-          {actionLabel && (
-            <Button variant="link" onClick={onAction} className="px-0 mt-2">
-              {actionLabel}
-            </Button>
-          )}
-        </CardContent>
-      )}
     </Card>
   );
 };
