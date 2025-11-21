@@ -150,7 +150,7 @@ const PersonalInfo = () => {
               )}
             </CardHeader>
             <CardContent className="space-y-3 pb-4">
-              <div className="grid gap-3">
+              <div className="grid gap-3 max-w-xs">
                 <div className="space-y-1.5">
                   <Label className="text-sm">Name</Label>
                   {isEditing ? (
