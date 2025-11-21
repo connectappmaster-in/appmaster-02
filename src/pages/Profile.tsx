@@ -255,9 +255,7 @@ const Profile = () => {
               <h1 className="text-2xl font-normal text-foreground">
                 Welcome, {formData.name || "User"}
               </h1>
-              <p className="text-sm text-muted-foreground mt-1">
-                Manage your info, privacy, and security to make our app work better for you.
-              </p>
+              
             </div>
           </div>
 
