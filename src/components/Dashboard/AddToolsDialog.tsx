@@ -28,9 +28,6 @@ const TOOL_ICONS: Record<string, LucideIcon> = {
   invoicing: FileText,
   it_help_desk: Ticket,
   subscriptions: TrendingUp,
-  inventory: Package,
-  marketing: TrendingUp,
-  recruitment: Users,
 };
 
 interface AddToolsDialogProps {
