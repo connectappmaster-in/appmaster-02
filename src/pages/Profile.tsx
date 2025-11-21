@@ -13,7 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ProfileSidebar } from "@/components/Profile/ProfileSidebar";
 import { ProfileCard } from "@/components/Profile/ProfileCard";
 import Navbar from "@/components/Navbar";
-import { Loader2, Mail, Shield, Lock, Search, Key, Smartphone, Activity, Eye, Settings, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Loader2, Mail, Shield, Lock, Key, Smartphone, Activity, Eye, Settings, AlertCircle, CheckCircle2 } from "lucide-react";
 const Profile = () => {
   const {
     user,
@@ -264,7 +264,7 @@ const Profile = () => {
           {/* Search Bar */}
           <div className="max-w-2xl mx-auto">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              
               
             </div>
           </div>
