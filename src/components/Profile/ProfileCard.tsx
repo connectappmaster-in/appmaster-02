@@ -28,17 +28,19 @@ export const ProfileCard = ({
             <CardTitle className="text-lg">{title}</CardTitle>
             <CardDescription className="text-sm">{description}</CardDescription>
           </div>
-          {icon && <div className="ml-4">{icon}</div>}
+          <div className="flex items-center gap-4">
+            {actionLabel && (
+              <Button variant="link" onClick={onAction} className="px-0">
+                {actionLabel}
+              </Button>
+            )}
+            {icon && <div>{icon}</div>}
+          </div>
         </div>
       </CardHeader>
-      {(children || actionLabel) && (
+      {children && (
         <CardContent>
           {children}
-          {actionLabel && (
-            <Button variant="link" onClick={onAction} className="px-0 mt-2">
-              {actionLabel}
-            </Button>
-          )}
         </CardContent>
       )}
     </Card>
