@@ -8,9 +8,9 @@ import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Loader2, Edit, Save, X, User, Mail, Phone } from "lucide-react";
+import { Loader2, Edit, Save, X } from "lucide-react";
 
 const PersonalInfo = () => {
   const { user, userType } = useAuth();
@@ -117,42 +117,31 @@ const PersonalInfo = () => {
       <div className="flex pt-14 h-full overflow-hidden">
         <ProfileSidebar />
       <main className="flex-1 overflow-y-auto">
-        <div className="max-w-4xl mx-auto px-4 py-4 space-y-4">
+        <div className="max-w-4xl mx-auto px-4 py-3 space-y-3">
           <div>
-            <h1 className="text-2xl font-normal">Personal info</h1>
-            <p className="text-muted-foreground mt-1">
-              Info about you and your preferences across our services
-            </p>
+            <h1 className="text-xl font-normal">Personal info</h1>
           </div>
 
           {/* Profile Picture Section */}
           <Card>
-            <CardHeader>
-              <CardTitle>Profile Picture</CardTitle>
-              <CardDescription>
-                A photo helps personalize your account
-              </CardDescription>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base">Profile Picture</CardTitle>
             </CardHeader>
-            <CardContent className="flex items-center gap-6">
-              <Avatar className="h-20 w-20 border-4 border-primary/20">
+            <CardContent className="flex items-center gap-4 pb-4">
+              <Avatar className="h-16 w-16 border-2 border-primary/20">
                 <AvatarImage src={profile?.avatar_url || ""} />
-                <AvatarFallback className="bg-gradient-to-br from-primary to-primary/60 text-primary-foreground text-2xl font-bold">
+                <AvatarFallback className="bg-gradient-to-br from-primary to-primary/60 text-primary-foreground text-xl font-bold">
                   {getInitials()}
                 </AvatarFallback>
               </Avatar>
-              <Button variant="outline">Change photo</Button>
+              <Button variant="outline" size="sm">Change photo</Button>
             </CardContent>
           </Card>
 
           {/* Basic Info Section */}
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <div>
-                <CardTitle>Basic info</CardTitle>
-                <CardDescription>
-                  Some info may be visible to other people
-                </CardDescription>
-              </div>
+            <CardHeader className="flex flex-row items-center justify-between pb-3">
+              <CardTitle className="text-base">Basic info</CardTitle>
               {!isEditing && (
                 <Button onClick={() => setIsEditing(true)} variant="outline" size="sm" className="gap-2">
                   <Edit className="h-4 w-4" />
@@ -160,52 +149,42 @@ const PersonalInfo = () => {
                 </Button>
               )}
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid gap-4">
-                <div className="space-y-2">
-                  <Label className="flex items-center gap-2">
-                    <User className="h-4 w-4" />
-                    Name
-                  </Label>
+            <CardContent className="space-y-3 pb-4">
+              <div className="grid gap-3">
+                <div className="space-y-1.5">
+                  <Label className="text-sm">Name</Label>
                   {isEditing ? (
                     <Input
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       placeholder="Enter your name"
+                      className="h-9"
                     />
                   ) : (
-                    <p className="text-sm py-2 px-3 bg-muted rounded-md">
+                    <p className="text-sm py-1.5 px-3 bg-muted rounded-md">
                       {formData.name || "-"}
                     </p>
                   )}
                 </div>
 
-                <div className="space-y-2">
-                  <Label className="flex items-center gap-2">
-                    <Mail className="h-4 w-4" />
-                    Email
-                  </Label>
-                  <p className="text-sm py-2 px-3 bg-muted/50 rounded-md">
+                <div className="space-y-1.5">
+                  <Label className="text-sm">Email</Label>
+                  <p className="text-sm py-1.5 px-3 bg-muted/50 rounded-md">
                     {userData?.email || user?.email}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    Email cannot be changed
                   </p>
                 </div>
 
-                <div className="space-y-2">
-                  <Label className="flex items-center gap-2">
-                    <Phone className="h-4 w-4" />
-                    Phone
-                  </Label>
+                <div className="space-y-1.5">
+                  <Label className="text-sm">Phone</Label>
                   {isEditing ? (
                     <Input
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      placeholder="Enter your phone number"
+                      placeholder="Enter your phone"
+                      className="h-9"
                     />
                   ) : (
-                    <p className="text-sm py-2 px-3 bg-muted rounded-md">
+                    <p className="text-sm py-1.5 px-3 bg-muted rounded-md">
                       {formData.phone || "-"}
                     </p>
                   )}
@@ -213,9 +192,10 @@ const PersonalInfo = () => {
               </div>
 
               {isEditing && (
-                <div className="flex justify-end gap-3 pt-4 border-t">
+                <div className="flex justify-end gap-2 pt-3 border-t">
                   <Button
                     variant="outline"
+                    size="sm"
                     onClick={() => {
                       setIsEditing(false);
                       if (userData) {
@@ -226,21 +206,22 @@ const PersonalInfo = () => {
                       }
                     }}
                   >
-                    <X className="h-4 w-4 mr-2" />
+                    <X className="h-4 w-4 mr-1" />
                     Cancel
                   </Button>
                   <Button
+                    size="sm"
                     onClick={() => updateMutation.mutate(formData)}
                     disabled={updateMutation.isPending}
                   >
                     {updateMutation.isPending ? (
                       <>
-                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        <Loader2 className="h-4 w-4 mr-1 animate-spin" />
                         Saving...
                       </>
                     ) : (
                       <>
-                        <Save className="h-4 w-4 mr-2" />
+                        <Save className="h-4 w-4 mr-1" />
                         Save
                       </>
                     )}
