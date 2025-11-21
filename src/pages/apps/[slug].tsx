@@ -81,14 +81,14 @@ const appDetails = {
       "Employee satisfaction"
     ]
   },
-  "it-help-desk": {
+  helpdesk: {
     icon: Ticket,
-    title: "IT Help Desk",
-    slug: "it-help-desk",
+    title: "HelpDesk",
+    slug: "helpdesk",
     tagline: "Deliver Exceptional Customer Support",
     description: "Organize and resolve customer issues efficiently with our ticketing system. Track, prioritize, and manage support requests from a unified dashboard.",
     color: "from-cyan-500 to-cyan-600",
-    toolPath: "/it-help-desk",
+    toolPath: "/helpdesk",
     features: [
       "Multi-channel support",
       "Ticket prioritization",

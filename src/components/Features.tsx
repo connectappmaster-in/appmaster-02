@@ -25,7 +25,7 @@ const Features = () => {
     title: "Help Desk",
     description: "Provide excellent customer support with organized ticket management",
     color: "from-cyan-500 to-cyan-600",
-    path: "/apps/it-help-desk"
+    path: "/apps/helpdesk"
   }, {
     icon: Briefcase,
     title: "Asset Management",

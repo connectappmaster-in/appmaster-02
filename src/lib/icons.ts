@@ -85,9 +85,9 @@ export const TOOL_ICONS: Record<
     path: "/subscriptions",
     gradient: "from-rose-500 to-rose-600",
   },
-  it_help_desk: {
+  helpdesk: {
     icon: Ticket,
-    path: "/it-help-desk",
+    path: "/helpdesk",
     gradient: "from-cyan-500 to-cyan-600",
   },
 };

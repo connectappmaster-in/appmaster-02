@@ -29,7 +29,7 @@ const modules = [
     category: "IT", 
     color: "from-cyan-500 to-blue-500",
     items: [
-      { name: "IT Help Desk", icon: Ticket, path: "/it-help-desk" },
+      { name: "HelpDesk", icon: Ticket, path: "/helpdesk" },
       { name: "Subscriptions", icon: PackageSearch, path: "/subscriptions" },
       { name: "Assets", icon: Package, path: "/assets" }
     ]
