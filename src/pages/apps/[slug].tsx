@@ -81,7 +81,7 @@ const appDetails = {
       "Employee satisfaction"
     ]
   },
-  it_help_desk: {
+  "it-help-desk": {
     icon: Ticket,
     title: "IT Help Desk",
     slug: "it-help-desk",
