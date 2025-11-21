@@ -28,8 +28,7 @@ const modules = [
     category: "HR", 
     color: "from-purple-500 to-pink-500",
     items: [
-      { name: "Attendance", icon: Clock, path: "/attendance" },
-      { name: "Recruitment", icon: Users, path: "/recruitment" }
+      { name: "Attendance", icon: Clock, path: "/attendance" }
     ]
   },
   { 
