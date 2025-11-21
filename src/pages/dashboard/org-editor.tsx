@@ -116,43 +116,48 @@ const OrgEditorDashboard = () => {
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <DashboardHeader />
       
-      <div className="container mx-auto px-6 py-8 space-y-8">
+      <div className="container mx-auto px-6 py-8 space-y-8 animate-fade-in">
         {/* Header Section */}
         <div className="space-y-2">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-primary to-primary/60 bg-clip-text text-transparent animate-fade-in">
             {organisation?.name}
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-base text-muted-foreground animate-fade-in" style={{ animationDelay: '0.1s' }}>
             {role === 'employee' ? '👋 Welcome back! Here are your daily tools' : '📊 Operational Dashboard'}
           </p>
         </div>
 
         {/* Stats Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <StatsCard
-            title="Total Leads"
-            value={stats?.leads || 0}
-            icon={TrendingUp}
-            color="from-blue-500 to-cyan-500"
-            onClick={() => window.location.href = '/crm/leads'}
-          />
-          <StatsCard
-            title="Total Contacts"
-            value={stats?.contacts || 0}
-            icon={Users}
-            color="from-orange-500 to-pink-500"
-            onClick={() => window.location.href = '/crm/customers'}
-          />
+          <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <StatsCard
+              title="Total Leads"
+              value={stats?.leads || 0}
+              icon={TrendingUp}
+              color="from-blue-500 via-cyan-500 to-blue-600"
+              onClick={() => window.location.href = '/crm/leads'}
+            />
+          </div>
+          <div className="animate-fade-in" style={{ animationDelay: '0.3s' }}>
+            <StatsCard
+              title="Total Contacts"
+              value={stats?.contacts || 0}
+              icon={Users}
+              color="from-orange-500 via-pink-500 to-orange-600"
+              onClick={() => window.location.href = '/crm/customers'}
+            />
+          </div>
         </div>
 
         {/* Tools Section */}
-        <div className="space-y-6">
+        <div className="space-y-6 animate-fade-in" style={{ animationDelay: '0.4s' }}>
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-bold">
+              <h2 className="text-3xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
                 {role === 'employee' ? 'Your Tools' : 'Available Tools'}
               </h2>
-              <p className="text-sm text-muted-foreground mt-1">
+              <p className="text-sm text-muted-foreground mt-2 flex items-center gap-2">
+                <span className="inline-block w-2 h-2 rounded-full bg-primary animate-pulse" />
                 {availableTools.length > 0 
                   ? `${availableTools.length} tool${availableTools.length !== 1 ? 's' : ''} available`
                   : 'No tools assigned yet'}
@@ -179,16 +184,21 @@ const OrgEditorDashboard = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {availableTools.map((tool) => (
-                <ToolCard
-                  key={tool.key}
-                  name={tool.name}
-                  icon={tool.icon}
-                  path={tool.path}
-                  color={tool.color}
-                  isActive={true}
-                  isLocked={false}
-                />
+              {availableTools.map((tool, index) => (
+                <div 
+                  key={tool.key} 
+                  className="animate-fade-in"
+                  style={{ animationDelay: `${0.5 + index * 0.1}s` }}
+                >
+                  <ToolCard
+                    name={tool.name}
+                    icon={tool.icon}
+                    path={tool.path}
+                    color={tool.color}
+                    isActive={true}
+                    isLocked={false}
+                  />
+                </div>
               ))}
             </div>
           )}
