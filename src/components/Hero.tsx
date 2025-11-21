@@ -38,12 +38,6 @@ const Hero = () => {
     description: "Manage recurring subscriptions and billing efficiently",
     color: "text-orange-600",
     path: "/apps/subscriptions"
-  }, {
-    icon: MessageSquare,
-    name: "Contact for Custom Tool",
-    description: "Need something specific? Let's build it together",
-    color: "text-violet-600",
-    path: "/contact"
   }];
   return <section className="relative pt-12 pb-8 px-4 bg-background overflow-hidden">
       {/* Animated Background Elements */}
@@ -89,7 +83,7 @@ const Hero = () => {
             <h3 className="text-center text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
               Explore Our Apps
             </h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-4 max-w-7xl mx-auto">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-7xl mx-auto">
               {featuredApps.map((app, index) => <Link key={index} to={app.path} className="block h-full">
                   <div className="bg-card/80 backdrop-blur-sm border border-border rounded-lg p-4 shadow-lg hover:shadow-2xl transition-all duration-300 group hover:border-primary/50 hover:scale-105 h-full">
                     <div className={`p-3 rounded-lg bg-background border border-border ${app.color} group-hover:scale-110 transition-transform duration-300 w-fit mb-3`}>
@@ -105,6 +99,30 @@ const Hero = () => {
                   </div>
                 </Link>)}
             </div>
+          </div>
+
+          {/* Contact CTA Section */}
+          <div className="animate-fade-in mt-8" style={{
+          animationDelay: "0.4s"
+        }}>
+            <Link to="/contact" className="block max-w-4xl mx-auto">
+              <div className="bg-gradient-to-r from-primary/10 to-accent/10 backdrop-blur-sm border border-primary/20 rounded-lg p-6 shadow-lg hover:shadow-2xl transition-all duration-300 group hover:border-primary/50">
+                <div className="flex items-center gap-4">
+                  <div className="p-4 rounded-lg bg-background border border-border text-primary group-hover:scale-110 transition-transform duration-300">
+                    <MessageSquare className="h-8 w-8" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors mb-1">
+                      Need a Custom Tool?
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      Let's build something specific for your business needs
+                    </p>
+                  </div>
+                  <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all duration-300" />
+                </div>
+              </div>
+            </Link>
           </div>
         </div>
       </div>
