@@ -156,7 +156,7 @@ const Login = () => {
                 />
               </div>
               <div className="flex justify-end pt-1">
-                <Button type="submit" className="w-40" disabled={loading}>
+                <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? "Logging in..." : "Login"}
                 </Button>
               </div>
