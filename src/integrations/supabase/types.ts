@@ -6820,6 +6820,397 @@ export type Database = {
         }
         Relationships: []
       }
+      update_alerts: {
+        Row: {
+          alert_type: string
+          created_at: string | null
+          device_id: string | null
+          id: string
+          is_read: boolean | null
+          job_id: string | null
+          message: string | null
+          organisation_id: string | null
+          read_at: string | null
+          read_by: string | null
+          severity: string | null
+          tenant_id: number
+          ticket_id: number | null
+          title: string
+        }
+        Insert: {
+          alert_type: string
+          created_at?: string | null
+          device_id?: string | null
+          id?: string
+          is_read?: boolean | null
+          job_id?: string | null
+          message?: string | null
+          organisation_id?: string | null
+          read_at?: string | null
+          read_by?: string | null
+          severity?: string | null
+          tenant_id: number
+          ticket_id?: number | null
+          title: string
+        }
+        Update: {
+          alert_type?: string
+          created_at?: string | null
+          device_id?: string | null
+          id?: string
+          is_read?: boolean | null
+          job_id?: string | null
+          message?: string | null
+          organisation_id?: string | null
+          read_at?: string | null
+          read_by?: string | null
+          severity?: string | null
+          tenant_id?: number
+          ticket_id?: number | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "update_alerts_device_id_fkey"
+            columns: ["device_id"]
+            isOneToOne: false
+            referencedRelation: "update_devices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "update_alerts_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "update_rollout_jobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "update_alerts_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "update_alerts_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      update_completions: {
+        Row: {
+          completed_at: string | null
+          completed_by: string
+          completion_month: string
+          created_at: string | null
+          device_id: string
+          id: string
+          is_manual: boolean | null
+          notes: string | null
+          organisation_id: string | null
+          tenant_id: number
+        }
+        Insert: {
+          completed_at?: string | null
+          completed_by: string
+          completion_month: string
+          created_at?: string | null
+          device_id: string
+          id?: string
+          is_manual?: boolean | null
+          notes?: string | null
+          organisation_id?: string | null
+          tenant_id: number
+        }
+        Update: {
+          completed_at?: string | null
+          completed_by?: string
+          completion_month?: string
+          created_at?: string | null
+          device_id?: string
+          id?: string
+          is_manual?: boolean | null
+          notes?: string | null
+          organisation_id?: string | null
+          tenant_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "update_completions_device_id_fkey"
+            columns: ["device_id"]
+            isOneToOne: false
+            referencedRelation: "update_devices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "update_completions_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "update_completions_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      update_devices: {
+        Row: {
+          asset_id: number
+          asset_tag: string | null
+          created_at: string | null
+          department: string | null
+          device_name: string
+          device_type: string
+          id: string
+          is_active: boolean | null
+          last_synced_at: string | null
+          last_update_check: string | null
+          location: string | null
+          metadata: Json | null
+          organisation_id: string | null
+          os_name: string | null
+          os_version: string | null
+          owner_id: string | null
+          owner_name: string | null
+          pending_updates_count: number | null
+          tenant_id: number
+          update_status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          asset_id: number
+          asset_tag?: string | null
+          created_at?: string | null
+          department?: string | null
+          device_name: string
+          device_type: string
+          id?: string
+          is_active?: boolean | null
+          last_synced_at?: string | null
+          last_update_check?: string | null
+          location?: string | null
+          metadata?: Json | null
+          organisation_id?: string | null
+          os_name?: string | null
+          os_version?: string | null
+          owner_id?: string | null
+          owner_name?: string | null
+          pending_updates_count?: number | null
+          tenant_id: number
+          update_status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          asset_id?: number
+          asset_tag?: string | null
+          created_at?: string | null
+          department?: string | null
+          device_name?: string
+          device_type?: string
+          id?: string
+          is_active?: boolean | null
+          last_synced_at?: string | null
+          last_update_check?: string | null
+          location?: string | null
+          metadata?: Json | null
+          organisation_id?: string | null
+          os_name?: string | null
+          os_version?: string | null
+          owner_id?: string | null
+          owner_name?: string | null
+          pending_updates_count?: number | null
+          tenant_id?: number
+          update_status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "update_devices_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "update_devices_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      update_job_devices: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          device_id: string
+          error_message: string | null
+          id: string
+          job_id: string
+          logs: Json | null
+          progress: number | null
+          retry_count: number | null
+          started_at: string | null
+          status: string | null
+          tenant_id: number
+          updated_at: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          device_id: string
+          error_message?: string | null
+          id?: string
+          job_id: string
+          logs?: Json | null
+          progress?: number | null
+          retry_count?: number | null
+          started_at?: string | null
+          status?: string | null
+          tenant_id: number
+          updated_at?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          device_id?: string
+          error_message?: string | null
+          id?: string
+          job_id?: string
+          logs?: Json | null
+          progress?: number | null
+          retry_count?: number | null
+          started_at?: string | null
+          status?: string | null
+          tenant_id?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "update_job_devices_device_id_fkey"
+            columns: ["device_id"]
+            isOneToOne: false
+            referencedRelation: "update_devices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "update_job_devices_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "update_rollout_jobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "update_job_devices_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      update_rollout_jobs: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          auto_reboot: boolean | null
+          completed_at: string | null
+          created_at: string | null
+          created_by: string
+          description: string | null
+          id: string
+          job_type: string | null
+          maintenance_window_end: string | null
+          maintenance_window_start: string | null
+          max_retries: number | null
+          name: string
+          organisation_id: string | null
+          requires_approval: boolean | null
+          rollback_on_failure: boolean | null
+          scheduled_at: string | null
+          started_at: string | null
+          status: string | null
+          target_filter: Json | null
+          target_type: string | null
+          tenant_id: number
+          updated_at: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          auto_reboot?: boolean | null
+          completed_at?: string | null
+          created_at?: string | null
+          created_by: string
+          description?: string | null
+          id?: string
+          job_type?: string | null
+          maintenance_window_end?: string | null
+          maintenance_window_start?: string | null
+          max_retries?: number | null
+          name: string
+          organisation_id?: string | null
+          requires_approval?: boolean | null
+          rollback_on_failure?: boolean | null
+          scheduled_at?: string | null
+          started_at?: string | null
+          status?: string | null
+          target_filter?: Json | null
+          target_type?: string | null
+          tenant_id: number
+          updated_at?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          auto_reboot?: boolean | null
+          completed_at?: string | null
+          created_at?: string | null
+          created_by?: string
+          description?: string | null
+          id?: string
+          job_type?: string | null
+          maintenance_window_end?: string | null
+          maintenance_window_start?: string | null
+          max_retries?: number | null
+          name?: string
+          organisation_id?: string | null
+          requires_approval?: boolean | null
+          rollback_on_failure?: boolean | null
+          scheduled_at?: string | null
+          started_at?: string | null
+          status?: string | null
+          target_filter?: Json | null
+          target_type?: string | null
+          tenant_id?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "update_rollout_jobs_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "update_rollout_jobs_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_mfa_settings: {
         Row: {
           backup_codes: string[] | null
