@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, FileText } from "lucide-react";
-import { format } from "date-fns";
+import { FormattedDate } from "@/components/FormattedDate";
 
 interface AuditLog {
   id: string;
@@ -136,7 +136,17 @@ export const OrgAuditLogs = () => {
               filteredLogs.map((log) => (
                 <TableRow key={log.id}>
                   <TableCell className="font-mono text-xs">
-                    {format(new Date(log.created_at), "MMM dd, yyyy HH:mm:ss")}
+                    <FormattedDate 
+                      date={log.created_at} 
+                      options={{ 
+                        year: 'numeric', 
+                        month: 'short', 
+                        day: '2-digit', 
+                        hour: '2-digit', 
+                        minute: '2-digit', 
+                        second: '2-digit' 
+                      }} 
+                    />
                   </TableCell>
                   <TableCell>
                     <Badge variant={getActionBadgeVariant(log.action_type)}>

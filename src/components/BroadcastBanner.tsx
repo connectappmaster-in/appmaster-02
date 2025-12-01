@@ -12,10 +12,12 @@ interface Broadcast {
 }
 
 export function BroadcastBanner() {
-  const { user, accountType, userRole } = useAuth();
+  const { user, accountType, userRole, userType } = useAuth();
   const [broadcasts, setBroadcasts] = useState<Broadcast[]>([]);
   const [dismissedIds, setDismissedIds] = useState<Set<string>>(new Set());
   const [bannerHeight, setBannerHeight] = useState(0);
+  
+  const isSuperAdmin = userType === 'appmaster_admin';
 
   useEffect(() => {
     if (!user) return;
@@ -112,9 +114,48 @@ export function BroadcastBanner() {
 
   if (!user || visibleBroadcasts.length === 0) return null;
 
+  // Different styling for super-admin broadcasts
+  if (isSuperAdmin) {
+    return (
+      <>
+        <div className="fixed top-0 left-0 right-0 z-50 bg-blue-50 dark:bg-blue-950/30 border-b border-blue-200 dark:border-blue-800">
+          <div className="container mx-auto px-4 space-y-2 py-2">
+            {visibleBroadcasts.map((broadcast) => (
+              <div
+                key={broadcast.id}
+                className="bg-blue-100 dark:bg-blue-900/50 border-l-4 border-blue-500 px-4 py-3 flex items-start gap-3 rounded-md animate-in slide-in-from-top duration-300"
+              >
+                <Megaphone className="h-5 w-5 text-blue-700 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+                <div className="flex-1 min-w-0">
+                  <h4 className="text-sm font-semibold text-blue-900 dark:text-blue-100 mb-1 truncate">
+                    {broadcast.title}
+                  </h4>
+                  <p className="text-sm text-blue-800 dark:text-blue-200 whitespace-normal break-words">
+                    {broadcast.description}
+                  </p>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-6 w-6 flex-shrink-0 hover:bg-blue-200 dark:hover:bg-blue-800"
+                  onClick={() => dismissBroadcast(broadcast.id)}
+                >
+                  <X className="h-4 w-4 text-blue-700 dark:text-blue-300" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* Spacer to prevent content from being hidden behind fixed banner */}
+        <div style={{ height: `${(visibleBroadcasts.length * 80) + 16}px` }} />
+      </>
+    );
+  }
+
+  // Regular user broadcasts (yellow theme, below navbar)
   return (
     <>
-      <div className="fixed top-[52px] left-0 right-0 z-40 bg-yellow-50 dark:bg-yellow-950/30 border-b border-yellow-200 dark:border-yellow-800">
+      <div className="fixed top-0 left-0 right-0 z-40 bg-yellow-50 dark:bg-yellow-950/30 border-b border-yellow-200 dark:border-yellow-800">
         <div className="container mx-auto px-4 space-y-2 py-2">
           {visibleBroadcasts.map((broadcast) => (
             <div

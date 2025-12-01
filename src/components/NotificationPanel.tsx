@@ -10,7 +10,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { formatDistanceToNow } from "date-fns";
+import { FormattedDate } from "@/components/FormattedDate";
 import { Link } from "react-router-dom";
 
 interface Notification {
@@ -209,7 +209,7 @@ export function NotificationPanel() {
                         {notification.message}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        {formatDistanceToNow(new Date(notification.created_at), { addSuffix: true })}
+                        <FormattedDate date={notification.created_at} format="relative" />
                       </p>
                     </div>
                     {!notification.is_read && (

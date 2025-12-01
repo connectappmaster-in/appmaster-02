@@ -211,14 +211,14 @@ const SuperAdminSettings = () => {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="UTC">UTC</SelectItem>
-                    <SelectItem value="America/New_York">Eastern Time</SelectItem>
-                    <SelectItem value="America/Chicago">Central Time</SelectItem>
-                    <SelectItem value="America/Los_Angeles">Pacific Time</SelectItem>
-                    <SelectItem value="Europe/London">London</SelectItem>
-                    <SelectItem value="Europe/Athens">EU +2:00</SelectItem>
-                    <SelectItem value="Asia/Kolkata">IST (Indian Standard Time)</SelectItem>
-                    <SelectItem value="Asia/Tokyo">Tokyo</SelectItem>
+                    <SelectItem value="UTC">UTC (Coordinated Universal Time)</SelectItem>
+                    <SelectItem value="America/New_York">UTC-05:00 Eastern Time (US & Canada)</SelectItem>
+                    <SelectItem value="America/Chicago">UTC-06:00 Central Time (US & Canada)</SelectItem>
+                    <SelectItem value="America/Los_Angeles">UTC-08:00 Pacific Time (US & Canada)</SelectItem>
+                    <SelectItem value="Europe/London">UTC±00:00 London (GMT)</SelectItem>
+                    <SelectItem value="Europe/Athens">UTC+02:00 Central Europe</SelectItem>
+                    <SelectItem value="Asia/Kolkata">UTC+05:30 IST (India Standard Time)</SelectItem>
+                    <SelectItem value="Asia/Tokyo">UTC+09:00 Tokyo (Japan Standard Time)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

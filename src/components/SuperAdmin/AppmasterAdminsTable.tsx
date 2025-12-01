@@ -19,6 +19,7 @@ import { EditAdminDialog } from "./EditAdminDialog";
 import { ViewAdminDetailsDialog } from "./ViewAdminDetailsDialog";
 import { DeleteAdminDialog } from "./DeleteAdminDialog";
 import { AddAdminDialog } from "./AddAdminDialog";
+import { ResetPasswordDialog } from "./ResetPasswordDialog";
 
 export const AppmasterAdminsTable = () => {
   const [admins, setAdmins] = useState<any[]>([]);
@@ -33,6 +34,7 @@ export const AppmasterAdminsTable = () => {
   const [viewDialogOpen, setViewDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
+  const [resetPasswordDialog, setResetPasswordDialog] = useState<{open: boolean, user: any | null}>({open: false, user: null});
 
   useEffect(() => {
     fetchAdmins();
@@ -180,14 +182,14 @@ export const AppmasterAdminsTable = () => {
     setEditDialogOpen(true);
   };
 
-  const handleResetPassword = async (admin: any) => {
-    try {
-      // This would typically send a password reset email
-      toast.success(`Password reset email sent to ${admin.email}`);
-      // TODO: Implement actual password reset via Supabase auth
-    } catch (error: any) {
-      toast.error(`Failed to send password reset: ${error.message}`);
-    }
+  const handleResetPassword = (admin: any) => {
+    setResetPasswordDialog({ 
+      open: true, 
+      user: {
+        ...admin,
+        auth_user_id: admin.user_id, // Map user_id to auth_user_id for admins
+      }
+    });
   };
 
   const getRoleBadgeColor = (role: string) => {
@@ -408,6 +410,13 @@ export const AppmasterAdminsTable = () => {
       <AddAdminDialog
         open={addDialogOpen}
         onOpenChange={setAddDialogOpen}
+        onSuccess={fetchAdmins}
+      />
+
+      <ResetPasswordDialog
+        open={resetPasswordDialog.open}
+        onOpenChange={(open) => !open && setResetPasswordDialog({open: false, user: null})}
+        user={resetPasswordDialog.user}
         onSuccess={fetchAdmins}
       />
     </div>

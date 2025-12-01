@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { AssignToolsDialog } from "./AssignToolsDialog";
 import { useUserTools } from "@/hooks/useUserTools";
 import { useAuth } from "@/contexts/AuthContext";
+import { ResetPasswordDialog } from "./ResetPasswordDialog";
 
 export const OrganizationUsersTable = () => {
   const [users, setUsers] = useState<any[]>([]);
@@ -33,6 +34,7 @@ export const OrganizationUsersTable = () => {
   const [changeRoleDialog, setChangeRoleDialog] = useState<{open: boolean, user: any | null}>({open: false, user: null});
   const [deleteDialog, setDeleteDialog] = useState<{open: boolean, user: any | null}>({open: false, user: null});
   const [assignToolsDialog, setAssignToolsDialog] = useState<{open: boolean, user: any | null}>({open: false, user: null});
+  const [resetPasswordDialog, setResetPasswordDialog] = useState<{open: boolean, user: any | null}>({open: false, user: null});
   const [newRole, setNewRole] = useState("");
 
   useEffect(() => {
@@ -199,17 +201,8 @@ export const OrganizationUsersTable = () => {
     }
   };
 
-  const handleResetPassword = async (user: any) => {
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
-        redirectTo: `${window.location.origin}/reset-password-confirm`,
-      });
-      
-      if (error) throw error;
-      toast.success("Password reset email sent to " + user.email);
-    } catch (error: any) {
-      toast.error("Failed to send reset email: " + error.message);
-    }
+  const handleResetPassword = (user: any) => {
+    setResetPasswordDialog({ open: true, user });
   };
 
   const handleDeleteUser = async () => {
@@ -473,6 +466,14 @@ export const OrganizationUsersTable = () => {
           assignedBy={currentUserId}
         />
       )}
+
+      {/* Reset Password Dialog */}
+      <ResetPasswordDialog
+        open={resetPasswordDialog.open}
+        onOpenChange={(open) => !open && setResetPasswordDialog({open: false, user: null})}
+        user={resetPasswordDialog.user}
+        onSuccess={fetchUsers}
+      />
     </div>
   );
 };

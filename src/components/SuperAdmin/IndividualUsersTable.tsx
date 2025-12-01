@@ -14,6 +14,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { AddIndividualUserDialog } from "./AddIndividualUserDialog";
 import { UserDetailsModal } from "./UserDetailsModal";
+import { ResetPasswordDialog } from "./ResetPasswordDialog";
 
 export const IndividualUsersTable = () => {
   const [users, setUsers] = useState<any[]>([]);
@@ -35,6 +36,7 @@ export const IndividualUsersTable = () => {
   const [updateStatusDialog, setUpdateStatusDialog] = useState<{open: boolean, user: any | null}>({open: false, user: null});
   const [updateEmailDialog, setUpdateEmailDialog] = useState<{open: boolean, user: any | null}>({open: false, user: null});
   const [deleteDialog, setDeleteDialog] = useState<{open: boolean, user: any | null}>({open: false, user: null});
+  const [resetPasswordDialog, setResetPasswordDialog] = useState<{open: boolean, user: any | null}>({open: false, user: null});
   const [newName, setNewName] = useState("");
   const [newStatus, setNewStatus] = useState("");
   const [newEmail, setNewEmail] = useState("");
@@ -222,17 +224,8 @@ export const IndividualUsersTable = () => {
     }
   };
 
-  const handleResetPassword = async (user: any) => {
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
-        redirectTo: `${window.location.origin}/reset-password-confirm`,
-      });
-      
-      if (error) throw error;
-      toast.success("Password reset email sent to " + user.email);
-    } catch (error: any) {
-      toast.error("Failed to send reset email: " + error.message);
-    }
+  const handleResetPassword = (user: any) => {
+    setResetPasswordDialog({ open: true, user });
   };
 
   const handleDeleteUser = async () => {
@@ -570,6 +563,14 @@ export const IndividualUsersTable = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Reset Password Dialog */}
+      <ResetPasswordDialog
+        open={resetPasswordDialog.open}
+        onOpenChange={(open) => !open && setResetPasswordDialog({open: false, user: null})}
+        user={resetPasswordDialog.user}
+        onSuccess={fetchUsers}
+      />
     </div>
     </>
   );

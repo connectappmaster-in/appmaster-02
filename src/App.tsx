@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { OrganisationProvider } from "./contexts/OrganisationContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
@@ -20,13 +20,45 @@ import NotFound from "./pages/NotFound";
 import Depreciation from "./pages/depreciation";
 import Invoicing from "./pages/invoicing";
 import Attendance from "./pages/attendance";
-import HelpDesk from "./pages/helpdesk";
-import Subscriptions from "./pages/subscriptions";
-import SubscriptionsDashboardPage from "./pages/subscriptions/dashboard";
-import SubscriptionsToolsPage from "./pages/subscriptions/tools";
-import SubscriptionsVendorsPage from "./pages/subscriptions/vendors";
-import SubscriptionsLicensesPage from "./pages/subscriptions/licenses";
-import SubscriptionsPaymentsPage from "./pages/subscriptions/payments";
+// Helpdesk imports
+import HelpdeskLayout from "./pages/helpdesk/layout";
+import HelpdeskDashboard from "./pages/helpdesk/dashboard";
+import HelpdeskTickets from "./pages/helpdesk/tickets/index";
+import TicketDetail from "./pages/helpdesk/tickets/[id]";
+import NewTicket from "./pages/helpdesk/new";
+import HelpdeskAssets from "./pages/helpdesk/assets";
+import AssetDetail from "./pages/helpdesk/assets/detail/[assetId]";
+import AssetReports from "./pages/helpdesk/assets/reports";
+import AllAssets from "./pages/helpdesk/assets/allassets";
+import AssetSetup from "./pages/helpdesk/assets/setup";
+import DepreciationDashboard from "./pages/helpdesk/assets/depreciation/index";
+import VendorsList from "./pages/helpdesk/assets/vendors/index";
+import LicensesList from "./pages/helpdesk/assets/licenses/index";
+import RepairsList from "./pages/helpdesk/assets/repairs/index";
+import CreateRepair from "./pages/helpdesk/assets/repairs/create";
+import RepairDetail from "./pages/helpdesk/assets/repairs/detail/[repairId]";
+// Assets Explore imports
+import AssetsBulkActions from "./pages/helpdesk/assets/explore/bulk-actions";
+import AssetsReports from "./pages/helpdesk/assets/explore/reports";
+import AssetsTools from "./pages/helpdesk/assets/tools";
+import AssetsFieldsSetup from "./pages/helpdesk/assets/setup/fields-setup";
+import HelpdeskProblemDetail from "./pages/helpdesk/problems/[id]";
+import HelpdeskChanges from "./pages/helpdesk/changes";
+import HelpdeskAutomation from "./pages/helpdesk/automation";
+import HelpdeskSubscriptionLayout from "./pages/helpdesk/subscription/index";
+import HelpdeskSubscriptionDashboard from "./pages/helpdesk/subscription/dashboard";
+import HelpdeskSubscriptionTools from "./pages/helpdesk/subscription/tools";
+import HelpdeskSubscriptionVendors from "./pages/helpdesk/subscription/vendors";
+import HelpdeskSubscriptionLicenses from "./pages/helpdesk/subscription/licenses";
+import HelpdeskSubscriptionPayments from "./pages/helpdesk/subscription/payments";
+import HelpdeskAdmin from "./pages/helpdesk/admin";
+import HelpdeskSettings from "./pages/helpdesk/settings";
+import HelpdeskQueues from "./pages/helpdesk/queues";
+import HelpdeskSLA from "./pages/helpdesk/sla";
+import HelpdeskReports from "./pages/helpdesk/reports";
+import HelpdeskMonitoring from "./pages/helpdesk/monitoring";
+import HelpdeskSystemUpdates from "./pages/helpdesk/system-updates";
+import HelpdeskAudit from "./pages/helpdesk/audit";
 import Assets from "./pages/assets";
 import ShopIncomeExpense from "./pages/shop-income-expense";
 import CRM from "./pages/crm";
@@ -37,15 +69,11 @@ import OpportunitiesPage from "./pages/crm/opportunities";
 import QuotesListPage from "./pages/crm/quotes";
 import PersonalExpense from "./pages/personal-expense";
 import Contact from "./pages/contact";
+import ReportIssue from "./pages/ReportIssue";
 import Admin from "./pages/admin/index";
 import Login from "./pages/Login";
 import AuthConfirm from "./pages/AuthConfirm";
-
 import Profile from "./pages/Profile";
-import PersonalInfo from "./pages/profile/PersonalInfo";
-import Security from "./pages/profile/Security";
-import Privacy from "./pages/profile/Privacy";
-import Payments from "./pages/profile/Payments";
 import InitializeAdmin from "./pages/InitializeAdmin";
 import PasswordReset from "./pages/PasswordReset";
 import ResetPasswordConfirm from "./pages/ResetPasswordConfirm";
@@ -63,25 +91,24 @@ import SuperAdminAdmins from "./pages/super-admin/admins";
 import SuperAdminSettings from "./pages/super-admin/settings";
 import SuperAdminLogs from "./pages/super-admin/logs";
 import SuperAdminContactSubmissions from "./pages/super-admin/contact-submissions";
+import SuperAdminIssueReports from "./pages/super-admin/issue-reports";
 import SuperAdminBroadcasts from "./pages/super-admin/broadcasts";
 import SuperAdminOrganizationUsers from "./pages/super-admin/organization-users";
 import SuperAdminTools from "./pages/super-admin/tools";
 import { BroadcastBanner } from "./components/BroadcastBanner";
 import AppDetailPage from "./pages/apps/[slug]";
 import Notifications from "./pages/Notifications";
-
+import ITAM from "./pages/itam/index";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60 * 5,
-      retry: 1,
-    },
-  },
+      retry: 1
+    }
+  }
 });
-
 const App = () => {
-  return (
-    <QueryClientProvider client={queryClient}>
+  return <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
@@ -113,21 +140,55 @@ const App = () => {
           <Route path="/reset-password-confirm" element={<ResetPasswordConfirm />} />
           <Route path="/accept-invitation" element={<AcceptInvitation />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/profile/personal-info" element={<PersonalInfo />} />
-          <Route path="/profile/security" element={<Security />} />
-          <Route path="/profile/payments" element={<Payments />} />
+          <Route path="/profile/personal-info" element={<Navigate to="/profile#personal-info" replace />} />
+          <Route path="/profile/security" element={<Navigate to="/profile#security" replace />} />
+          <Route path="/profile/payments" element={<Navigate to="/profile#payments" replace />} />
           <Route path="/initialize-admin" element={<InitializeAdmin />} />
           <Route path="/depreciation" element={<ToolAccessGuard toolKey="assets"><Depreciation /></ToolAccessGuard>} />
           <Route path="/invoicing" element={<ToolAccessGuard toolKey="invoicing"><Invoicing /></ToolAccessGuard>} />
           <Route path="/attendance" element={<ToolAccessGuard toolKey="attendance"><Attendance /></ToolAccessGuard>} />
-          <Route path="/helpdesk" element={<ToolAccessGuard toolKey="helpdesk"><HelpDesk /></ToolAccessGuard>} />
-          <Route path="/subscriptions" element={<Subscriptions />}>
-            <Route index element={<SubscriptionsDashboardPage />} />
-            <Route path="tools" element={<SubscriptionsToolsPage />} />
-            <Route path="vendors" element={<SubscriptionsVendorsPage />} />
-            <Route path="licenses" element={<SubscriptionsLicensesPage />} />
-            <Route path="payments" element={<SubscriptionsPaymentsPage />} />
+          
+          {/* Helpdesk Routes - All under /helpdesk */}
+          <Route path="/helpdesk" element={<ToolAccessGuard toolKey="helpdesk"><HelpdeskLayout /></ToolAccessGuard>}>
+            
+            <Route path="tickets" element={<HelpdeskTickets />} />
+            <Route path="tickets/:id" element={<TicketDetail />} />
+            <Route path="new" element={<NewTicket />} />
+            <Route path="assets" element={<HelpdeskAssets />} />
+            <Route path="assets/allassets" element={<AllAssets />} />
+            <Route path="assets/detail/:assetId" element={<AssetDetail />} />
+            <Route path="assets/reports" element={<AssetReports />} />
+            <Route path="assets/tools" element={<AssetsTools />} />
+            <Route path="assets/setup" element={<AssetSetup />} />
+            <Route path="assets/depreciation" element={<DepreciationDashboard />} />
+            <Route path="assets/vendors" element={<VendorsList />} />
+            <Route path="assets/licenses" element={<LicensesList />} />
+            <Route path="assets/repairs" element={<RepairsList />} />
+            <Route path="assets/repairs/create" element={<CreateRepair />} />
+            <Route path="assets/repairs/detail/:repairId" element={<RepairDetail />} />
+            <Route path="assets/setup/fields-setup" element={<AssetsFieldsSetup />} />
+            <Route path="subscription" element={<HelpdeskSubscriptionLayout />}>
+              <Route index element={<HelpdeskSubscriptionDashboard />} />
+              <Route path="tools" element={<HelpdeskSubscriptionTools />} />
+              <Route path="vendors" element={<HelpdeskSubscriptionVendors />} />
+              <Route path="licenses" element={<HelpdeskSubscriptionLicenses />} />
+              <Route path="payments" element={<HelpdeskSubscriptionPayments />} />
+            </Route>
+            <Route path="system-updates" element={<HelpdeskSystemUpdates />} />
+            <Route path="monitoring" element={<HelpdeskMonitoring />} />
+            <Route path="reports" element={<HelpdeskReports />} />
+            <Route path="audit" element={<HelpdeskAudit />} />
+            <Route path="problems" element={<HelpdeskTickets />} />
+            <Route path="problems/:id" element={<HelpdeskProblemDetail />} />
+            <Route path="changes" element={<HelpdeskChanges />} />
+            <Route path="automation" element={<HelpdeskAutomation />} />
+            <Route path="admin" element={<HelpdeskAdmin />} />
+            <Route path="settings" element={<HelpdeskSettings />} />
+            <Route path="queues" element={<HelpdeskQueues />} />
+            <Route path="sla" element={<HelpdeskSLA />} />
           </Route>
+          
+          <Route path="/itam" element={<ToolAccessGuard toolKey="itam"><ITAM /></ToolAccessGuard>} />
           <Route path="/assets" element={<ToolAccessGuard toolKey="assets"><Assets /></ToolAccessGuard>} />
           <Route path="/shop-income-expense" element={<ShopIncomeExpense />} />
           <Route path="/crm" element={<ToolAccessGuard toolKey="crm"><CRM /></ToolAccessGuard>} />
@@ -138,6 +199,7 @@ const App = () => {
           <Route path="/crm/quotes" element={<ToolAccessGuard toolKey="crm"><QuotesListPage /></ToolAccessGuard>} />
           <Route path="/personal-expense" element={<PersonalExpense />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/report-issue" element={<ReportIssue />} />
           <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
           <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
           <Route path="/super-admin" element={<SuperAdminRoute><SuperAdmin /></SuperAdminRoute>}>
@@ -153,6 +215,7 @@ const App = () => {
             <Route path="jobs" element={<SuperAdminJobs />} />
             <Route path="admins" element={<SuperAdminAdmins />} />
             <Route path="contact-submissions" element={<SuperAdminContactSubmissions />} />
+            <Route path="issue-reports" element={<SuperAdminIssueReports />} />
             <Route path="broadcasts" element={<SuperAdminBroadcasts />} />
             <Route path="organization-users" element={<SuperAdminOrganizationUsers />} />
             <Route path="settings" element={<SuperAdminSettings />} />
@@ -164,8 +227,6 @@ const App = () => {
           </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
-  </QueryClientProvider>
-  );
+  </QueryClientProvider>;
 };
-
 export default App;

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { Loader2, ShieldAlert, AlertTriangle } from "lucide-react";
+import { Loader2, ShieldAlert, AlertTriangle, Megaphone } from "lucide-react";
 import { Button } from "./ui/button";
 
 interface ToolAccessGuardProps {
@@ -17,10 +17,52 @@ export const ToolAccessGuard = ({ toolKey, children }: ToolAccessGuardProps) => 
   const [isLoading, setIsLoading] = useState(true);
   const [isToolInactive, setIsToolInactive] = useState(false);
   const [isSuperAdmin, setIsSuperAdmin] = useState(false);
+  const [inactiveToolNotice, setInactiveToolNotice] = useState<{ title: string; description: string } | null>(null);
 
   useEffect(() => {
     checkAccess();
+    fetchInactiveToolNotice();
   }, [user, toolKey, accountType]);
+
+  const fetchInactiveToolNotice = async () => {
+    // First, try to fetch tool-specific inactive notice
+    const { data: toolData } = await supabase
+      .from('tools')
+      .select('id')
+      .eq('key', toolKey)
+      .maybeSingle();
+
+    if (toolData) {
+      const { data: toolSpecificNotice } = await supabase
+        .from('tool_inactive_notices')
+        .select('title, message')
+        .eq('tool_id', toolData.id)
+        .eq('is_active', true)
+        .maybeSingle();
+
+      if (toolSpecificNotice) {
+        setInactiveToolNotice({
+          title: toolSpecificNotice.title,
+          description: toolSpecificNotice.message
+        });
+        return;
+      }
+    }
+
+    // Fallback to generic broadcast message
+    const { data: broadcastNotice } = await supabase
+      .from('broadcasts')
+      .select('title, description')
+      .eq('is_active', true)
+      .ilike('title', '%tool inactive%')
+      .or(`scheduled_for.is.null,scheduled_for.lte.${new Date().toISOString()}`)
+      .or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`)
+      .maybeSingle();
+
+    if (broadcastNotice) {
+      setInactiveToolNotice(broadcastNotice);
+    }
+  };
 
   const checkAccess = async () => {
     if (!user) {
@@ -75,18 +117,30 @@ export const ToolAccessGuard = ({ toolKey, children }: ToolAccessGuardProps) => 
         return;
       }
 
-      // Check if user has the tool assigned
-      const { data, error } = await supabase.rpc('user_has_tool_access', {
-        user_auth_id: user.id,
-        tool_key: toolKey,
-      });
+      // For organization users, check if tool is activated for their organization
+      const { data: userData } = await supabase
+        .from('users')
+        .select('organisation_id, role')
+        .eq('auth_user_id', user.id)
+        .maybeSingle();
 
-      if (error) {
-        console.error("Error checking tool access:", error);
+      if (!userData?.organisation_id) {
         setHasAccess(false);
-      } else {
-        setHasAccess(data);
+        setIsLoading(false);
+        return;
       }
+
+      // Get organization's active tools
+      const { data: orgData } = await supabase
+        .from('organisations')
+        .select('active_tools')
+        .eq('id', userData.organisation_id)
+        .maybeSingle();
+
+      // Check if the tool is in organization's active tools list
+      const isToolActive = orgData?.active_tools?.includes(toolKey) || false;
+      
+      setHasAccess(isToolActive);
     } catch (error) {
       console.error("Error in checkAccess:", error);
       setHasAccess(false);
@@ -137,12 +191,26 @@ export const ToolAccessGuard = ({ toolKey, children }: ToolAccessGuardProps) => 
 
   return (
     <>
-      {isSuperAdmin && isToolInactive && (
-        <div className="bg-warning/10 border-warning border px-4 py-2 text-sm text-warning-foreground">
-          <strong>Super Admin Notice:</strong> This tool is currently inactive. Regular users cannot access it.
+      {isSuperAdmin && isToolInactive && inactiveToolNotice && (
+        <div className="fixed top-0 left-0 right-0 z-40 bg-blue-50 dark:bg-blue-950/30 border-b border-blue-200 dark:border-blue-800">
+          <div className="container mx-auto px-4 py-2">
+            <div className="bg-blue-100 dark:bg-blue-900/50 border-l-4 border-blue-500 px-4 py-3 flex items-start gap-3 rounded-md">
+              <Megaphone className="h-5 w-5 text-blue-700 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+              <div className="flex-1 min-w-0">
+                <h4 className="text-sm font-semibold text-blue-900 dark:text-blue-100 mb-1">
+                  {inactiveToolNotice.title}
+                </h4>
+                <p className="text-sm text-blue-800 dark:text-blue-200">
+                  {inactiveToolNotice.description}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       )}
-      {children}
+      <div style={{ paddingTop: isSuperAdmin && isToolInactive && inactiveToolNotice ? '80px' : '0' }}>
+        {children}
+      </div>
     </>
   );
 };

@@ -14,6 +14,8 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ToolInactiveNoticesManager } from "@/components/SuperAdmin/ToolInactiveNoticesManager";
+import { Separator } from "@/components/ui/separator";
 interface Broadcast {
   id: string;
   title: string;
@@ -192,12 +194,27 @@ export default function BroadcastsPage() {
     return labels[audience] || audience;
   };
   return <div className="p-6 space-y-6">
+      {/* Tool-Specific Inactive Notices Section */}
+      <Card>
+        <CardContent className="pt-6">
+          <ToolInactiveNoticesManager />
+        </CardContent>
+      </Card>
+
+      <Separator />
+
+      {/* General Broadcast Messages Section */}
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              
-              
+              <CardTitle>Broadcast Management</CardTitle>
+              <CardDescription>
+                Create and manage system-wide broadcasts. 
+                <span className="block mt-2 text-xs bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded px-2 py-1 inline-block">
+                  💡 Tip: Create a broadcast with "Tool Inactive" in the title to customize the notice shown to super admins when viewing inactive tools.
+                </span>
+              </CardDescription>
             </div>
             <Button onClick={() => setDialogOpen(true)}>
               <Plus className="h-4 w-4 mr-2" />

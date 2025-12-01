@@ -16,6 +16,7 @@ import { NotificationPanel } from "@/components/NotificationPanel";
 
 const routeTitles: Record<string, string> = {
   "/super-admin": "Dashboard",
+  "/super-admin/dashboard": "Dashboard",
   "/super-admin/users": "Individual Users",
   "/super-admin/organisations": "Organizations",
   "/super-admin/organization-users": "Organization Users",
@@ -24,6 +25,7 @@ const routeTitles: Record<string, string> = {
   "/super-admin/broadcasts": "Broadcast Messages",
   "/super-admin/contact-submissions": "Contact Submissions",
   "/super-admin/features": "Feature Flags",
+  "/super-admin/issue-reports": "Issue Reports",
   "/super-admin/jobs": "Worker Jobs Monitor",
   "/super-admin/logs": "System Logs",
   "/super-admin/plans": "Subscription Plans",
@@ -38,12 +40,12 @@ const SuperAdmin = () => {
   const pageTitle = routeTitles[location.pathname] || "Super Admin";
   const { user, signOut } = useAuth();
 
-  return <div className="h-screen flex w-full overflow-hidden">
+  return <div className="h-screen flex w-full overflow-hidden mt-0">
       <BackButton />
       <SuperAdminSidebar />
       
       <main className="flex-1 h-screen flex flex-col bg-background">
-        <div className="border-b px-4 flex items-center justify-between shrink-0" style={{
+        <div className="border-b px-4 flex items-center justify-between shrink-0 mt-0" style={{
         height: "52px"
       }}>
           <h1 className="text-lg font-semibold">{pageTitle}</h1>
