@@ -1,5 +1,8 @@
 project_id = "awuamriycpisutbfuxid"
 
+[functions.ingest-device-updates]
+verify_jwt = false
+
 [functions.get-admin-dashboard]
 verify_jwt = true
 
