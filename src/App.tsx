@@ -58,6 +58,9 @@ import HelpdeskSLA from "./pages/helpdesk/sla";
 import HelpdeskReports from "./pages/helpdesk/reports";
 import HelpdeskMonitoring from "./pages/helpdesk/monitoring";
 import HelpdeskSystemUpdates from "./pages/helpdesk/system-updates";
+import SystemUpdatesSettings from "./pages/helpdesk/system-updates/settings";
+import SystemUpdatesDevices from "./pages/helpdesk/system-updates/devices";
+import SystemUpdatesUpdates from "./pages/helpdesk/system-updates/updates";
 import HelpdeskAudit from "./pages/helpdesk/audit";
 import Assets from "./pages/assets";
 import ShopIncomeExpense from "./pages/shop-income-expense";
@@ -175,6 +178,9 @@ const App = () => {
               <Route path="payments" element={<HelpdeskSubscriptionPayments />} />
             </Route>
             <Route path="system-updates" element={<HelpdeskSystemUpdates />} />
+            <Route path="system-updates/settings" element={<SystemUpdatesSettings />} />
+            <Route path="system-updates/devices" element={<SystemUpdatesDevices />} />
+            <Route path="system-updates/updates" element={<SystemUpdatesUpdates />} />
             <Route path="monitoring" element={<HelpdeskMonitoring />} />
             <Route path="reports" element={<HelpdeskReports />} />
             <Route path="audit" element={<HelpdeskAudit />} />
