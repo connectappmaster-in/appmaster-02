@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft, Save, Download } from "lucide-react";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 
@@ -50,6 +50,177 @@ export default function SettingsPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleDownloadAgent = () => {
+    const agentScript = `# AppMaster Device Update Agent
+# This script collects Windows Update information and sends it to AppMaster
+
+# === CONFIGURATION ===
+$API_ENDPOINT = "https://zxtpfrgsfuiwdppgiliv.supabase.co/functions/v1/ingest-device-updates"
+$API_KEY = "6q\`"^:I\`\`0Zt!)acO1LrD@LLFam4FDWn"  # Your device agent API key
+
+# === FUNCTIONS ===
+
+function Get-PendingUpdates {
+    try {
+        $updateSession = New-Object -ComObject Microsoft.Update.Session
+        $updateSearcher = $updateSession.CreateUpdateSearcher()
+        $searchResult = $updateSearcher.Search("IsInstalled=0 and Type='Software'")
+        
+        $updates = @()
+        foreach ($update in $searchResult.Updates) {
+            $kbNumber = "Unknown"
+            if ($update.KBArticleIDs.Count -gt 0) {
+                $kbNumber = "KB" + $update.KBArticleIDs[0]
+            }
+            
+            $severity = "Unknown"
+            if ($update.MsrcSeverity) {
+                $severity = $update.MsrcSeverity
+            }
+            
+            $updates += @{
+                kb_number = $kbNumber
+                title = $update.Title
+                severity = $severity
+                size_mb = [math]::Round($update.MaxDownloadSize / 1MB, 2)
+            }
+        }
+        return $updates
+    }
+    catch {
+        Write-Warning "Error getting pending updates: $_"
+        return @()
+    }
+}
+
+function Get-InstalledUpdates {
+    try {
+        $updates = @()
+        $hotfixes = Get-HotFix | Select-Object -First 50 | Sort-Object InstalledOn -Descending
+        
+        foreach ($hotfix in $hotfixes) {
+            if ($hotfix.HotFixID -and $hotfix.InstalledOn) {
+                $updates += @{
+                    kb_number = $hotfix.HotFixID
+                    title = $hotfix.Description
+                    installed_date = $hotfix.InstalledOn.ToString("yyyy-MM-ddTHH:mm:ss")
+                }
+            }
+        }
+        return $updates
+    }
+    catch {
+        Write-Warning "Error getting installed updates: $_"
+        return @()
+    }
+}
+
+function Get-FailedUpdates {
+    try {
+        $updates = @()
+        $events = Get-WinEvent -FilterHashtable @{
+            LogName = 'System'
+            ProviderName = 'Microsoft-Windows-WindowsUpdateClient'
+            ID = 20
+        } -MaxEvents 10 -ErrorAction SilentlyContinue
+        
+        foreach ($event in $events) {
+            if ($event.Message -match 'KB(\\d+)') {
+                $kbNumber = "KB" + $Matches[1]
+                $updates += @{
+                    kb_number = $kbNumber
+                    title = "Failed update"
+                    error_code = $event.Id.ToString()
+                }
+            }
+        }
+        return $updates
+    }
+    catch {
+        Write-Warning "Error getting failed updates: $_"
+        return @()
+    }
+}
+
+# === MAIN SCRIPT ===
+
+Write-Host "=== AppMaster Device Update Agent ===" -ForegroundColor Cyan
+Write-Host "Starting update check at $(Get-Date)" -ForegroundColor Gray
+
+# Collect device information
+Write-Host "\`nCollecting device information..." -ForegroundColor Yellow
+$computerInfo = Get-ComputerInfo
+$hostname = $env:COMPUTERNAME
+$serialNumber = (Get-CimInstance Win32_BIOS).SerialNumber
+$osVersion = $computerInfo.OSDisplayVersion
+$osBuild = $computerInfo.OSBuildNumber
+$lastBootTime = (Get-CimInstance Win32_OperatingSystem).LastBootUpTime.ToString("yyyy-MM-ddTHH:mm:ss")
+$ipAddress = (Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.InterfaceAlias -notlike "*Loopback*" } | Select-Object -First 1).IPAddress
+
+Write-Host "Hostname: $hostname" -ForegroundColor Gray
+Write-Host "Serial Number: $serialNumber" -ForegroundColor Gray
+Write-Host "OS Version: $osVersion (Build $osBuild)" -ForegroundColor Gray
+
+# Collect update information
+Write-Host "\`nChecking for updates..." -ForegroundColor Yellow
+$pendingUpdates = Get-PendingUpdates
+$installedUpdates = Get-InstalledUpdates
+$failedUpdates = Get-FailedUpdates
+
+Write-Host "Pending updates: $($pendingUpdates.Count)" -ForegroundColor $(if ($pendingUpdates.Count -gt 0) { "Yellow" } else { "Green" })
+Write-Host "Recently installed: $($installedUpdates.Count)" -ForegroundColor Gray
+Write-Host "Failed updates: $($failedUpdates.Count)" -ForegroundColor $(if ($failedUpdates.Count -gt 0) { "Red" } else { "Green" })
+
+# Build payload
+$payload = @{
+    hostname = $hostname
+    serial_number = $serialNumber
+    os_version = $osVersion
+    os_build = $osBuild
+    last_boot_time = $lastBootTime
+    ip_address = $ipAddress
+    pending_updates = $pendingUpdates
+    installed_updates = $installedUpdates
+    failed_updates = $failedUpdates
+} | ConvertTo-Json -Depth 10
+
+# Send to AppMaster
+Write-Host "\`nSending data to AppMaster..." -ForegroundColor Yellow
+
+try {
+    $headers = @{
+        "Authorization" = "Bearer $API_KEY"
+        "Content-Type" = "application/json"
+    }
+    
+    $response = Invoke-RestMethod -Uri $API_ENDPOINT -Method Post -Headers $headers -Body $payload -TimeoutSec 30
+    
+    Write-Host "✓ Success! Device synced successfully" -ForegroundColor Green
+    Write-Host "  Device ID: $($response.device_id)" -ForegroundColor Gray
+    Write-Host "  Compliance Status: $($response.compliance_status)" -ForegroundColor $(if ($response.compliance_status -eq "compliant") { "Green" } else { "Red" })
+    Write-Host "  Updates Processed: $($response.updates_processed)" -ForegroundColor Gray
+}
+catch {
+    Write-Host "✗ Error sending data: $_" -ForegroundColor Red
+    Write-Host $_.Exception.Message -ForegroundColor Red
+    exit 1
+}
+
+Write-Host "\`nUpdate check completed at $(Get-Date)" -ForegroundColor Cyan
+exit 0`;
+
+    const blob = new Blob([agentScript], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'device-update-agent.ps1';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    toast.success("PowerShell agent downloaded successfully");
   };
 
   return (
@@ -209,23 +380,51 @@ export default function SettingsPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Integration Settings</CardTitle>
+            <CardTitle>Device Agent</CardTitle>
             <CardDescription>
-              Configure external integrations and data ingestion endpoints
+              Download and deploy the PowerShell agent to collect Windows Update data from your devices
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label>API Endpoint URL</Label>
-              <Input
-                type="text"
-                value="/api/ingest/system-updates"
-                disabled
-                className="font-mono text-sm"
-              />
-              <p className="text-sm text-muted-foreground">
-                Use this endpoint to push device update status from RMM tools or scripts
-              </p>
+            <div className="space-y-4">
+              <div className="flex items-start justify-between p-4 bg-muted/50 rounded-lg">
+                <div className="flex-1">
+                  <h4 className="font-semibold mb-2">Windows Update Agent</h4>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    PowerShell script that collects Windows Update information and sends it to AppMaster API
+                  </p>
+                  <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
+                    <li>Tracks pending, installed, and failed updates</li>
+                    <li>Monitors device compliance status</li>
+                    <li>Can be scheduled to run daily via Task Scheduler</li>
+                  </ul>
+                </div>
+                <Button onClick={handleDownloadAgent} className="ml-4">
+                  <Download className="h-4 w-4 mr-2" />
+                  Download Agent
+                </Button>
+              </div>
+              
+              <div className="space-y-2">
+                <Label>API Endpoint</Label>
+                <Input
+                  type="text"
+                  value="https://zxtpfrgsfuiwdppgiliv.supabase.co/functions/v1/ingest-device-updates"
+                  disabled
+                  className="font-mono text-sm"
+                />
+              </div>
+
+              <div className="p-4 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900 rounded-lg">
+                <h4 className="font-semibold text-sm mb-2 text-blue-900 dark:text-blue-100">Installation Instructions</h4>
+                <ol className="text-sm text-blue-800 dark:text-blue-200 space-y-1 list-decimal list-inside">
+                  <li>Download the PowerShell agent script</li>
+                  <li>Save it to a location on each device (e.g., C:\AppMaster\)</li>
+                  <li>Open Task Scheduler and create a new task</li>
+                  <li>Set it to run daily with highest privileges</li>
+                  <li>Configure the action to run: powershell.exe -ExecutionPolicy Bypass -File "C:\AppMaster\device-update-agent.ps1"</li>
+                </ol>
+              </div>
             </div>
           </CardContent>
         </Card>
